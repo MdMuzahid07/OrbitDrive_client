@@ -30,7 +30,7 @@ const Modal: FC<Props> = ({
   };
 
   return (
-    <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black">
+    <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-2xl">
         <h3 className="mb-4 text-lg font-semibold">{title}</h3>
         <input
