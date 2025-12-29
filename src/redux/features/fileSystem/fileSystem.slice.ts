@@ -14,7 +14,7 @@ const initialState: FileSystemState = {
   expandedFolders: ["root"],
   openFile: null,
   contextMenu: null,
-  sidebarOpen: false,
+  sidebarOpen: true,
 };
 
 const fileSystemSlice = createSlice({
@@ -41,8 +41,8 @@ const fileSystemSlice = createSlice({
     setOpenFile: (state, action: PayloadAction<FileNode | null>) => {
       state.openFile = action.payload;
     },
-    setSidebarOpen: (state, action: PayloadAction<boolean>) => {
-      state.sidebarOpen = action.payload;
+    toggleSidebar: (state) => {
+      state.sidebarOpen = !state.sidebarOpen;
     },
   },
 });
@@ -53,7 +53,7 @@ export const {
   setExpandedFolders,
   setContextMenu,
   setOpenFile,
-  setSidebarOpen,
+  toggleSidebar,
 } = fileSystemSlice.actions;
 
 export default fileSystemSlice.reducer;

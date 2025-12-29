@@ -1,19 +1,34 @@
-import { CreateNodePayload, FileNode } from "../../../types";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { FileNode } from "../../../types";
+import { CreateNodePayload } from "../../../types/fileSystem";
 import baseApi from "../../api/baseApi";
 
 const fileSystemApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllNodes: builder.query<FileNode[], void>({
-      query: () => "/nodes/all",
+      query: () => "/all",
+      transformResponse: (res: any) => res.data,
       providesTags: ["Nodes"],
+    }),
+
+    getNodesByParent: builder.query<FileNode[], string>({
+      query: (parentId) => ({
+        url: "/",
+        params: { parentId: parentId === "root" ? undefined : parentId },
+      }),
+      transformResponse: (res: any) => res.data,
+      providesTags: (result, error, parentId) => [
+        { type: "Nodes", id: parentId },
+      ],
     }),
 
     createNode: builder.mutation<FileNode, CreateNodePayload>({
       query: (payload) => ({
-        url: "/nodes",
+        url: "/",
         method: "POST",
         body: payload,
       }),
+      transformResponse: (res: any) => res.data,
       invalidatesTags: ["Nodes"],
     }),
 
@@ -36,52 +51,54 @@ const fileSystemApi = baseApi.injectEndpoints({
         formData.append("parentId", parentId);
 
         return {
-          url: "/nodes/upload",
+          url: "/upload",
           method: "POST",
           body: formData,
         };
       },
+      transformResponse: (res: any) => res.data,
       invalidatesTags: ["Nodes"],
     }),
 
-    renameNode: builder.mutation<FileNode, { id: string; name: string }>({
-      query: ({ id, name }) => ({
-        url: `/nodes/${id}/rename`,
-        method: "PATCH",
-        body: { name },
-      }),
-      invalidatesTags: ["Nodes"],
-    }),
-
-    updateNodeContent: builder.mutation<
+    updateNode: builder.mutation<
       FileNode,
-      { id: string; content: string }
+      { id: string; name?: string; content?: string }
     >({
-      query: ({ id, content }) => ({
-        url: `/nodes/${id}/content`,
+      query: ({ id, ...payload }) => ({
+        url: `/${id}`,
         method: "PATCH",
-        body: { content },
+        body: payload,
       }),
+      transformResponse: (res: any) => res.data,
       invalidatesTags: ["Nodes"],
     }),
 
     deleteNode: builder.mutation<void, string>({
       query: (id) => ({
-        url: `/nodes/${id}`,
+        url: `/${id}`,
         method: "DELETE",
       }),
+      transformResponse: (res: any) => res.data,
       invalidatesTags: ["Nodes"],
     }),
+
+    getBreadcrumbs: builder.query<Array<{ _id: string; name: string }>, string>(
+      {
+        query: (folderId) => `/${folderId}/breadcrumbs`,
+        transformResponse: (res: any) => res.data,
+      },
+    ),
   }),
 });
 
 export const {
   useGetAllNodesQuery,
+  useGetNodesByParentQuery,
   useCreateNodeMutation,
   useUploadFilesMutation,
-  useRenameNodeMutation,
-  useUpdateNodeContentMutation,
+  useUpdateNodeMutation,
   useDeleteNodeMutation,
+  useGetBreadcrumbsQuery,
 } = fileSystemApi;
 
 export default fileSystemApi;

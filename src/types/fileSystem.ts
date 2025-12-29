@@ -7,14 +7,15 @@ export interface FileNode {
   url?: string;
   size?: number;
   mimeType?: string;
-  isDeleted: boolean;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface Breadcrumb {
-  _id: string;
+export interface CreateNodePayload {
   name: string;
+  type: "folder" | "text";
+  parentId: string;
+  content?: string;
 }
 
 export interface ContextMenuState {
