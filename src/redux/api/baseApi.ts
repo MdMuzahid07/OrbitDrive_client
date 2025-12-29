@@ -11,14 +11,7 @@ const baseApi = createApi({
     baseUrl: url,
     credentials: "include",
   }),
-  tagTypes: [
-    "jobs",
-    "profile",
-    "user",
-    "applications",
-    "categories",
-    "company",
-  ],
+  tagTypes: ["Nodes"],
   endpoints: () => ({}),
 });
 
