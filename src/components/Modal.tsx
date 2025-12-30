@@ -42,7 +42,7 @@ const Modal: FC<Props> = ({
             onChange={(e) => onChange(e.target.value)}
             onKeyDown={handleKeyPress}
             placeholder="Enter name..."
-            className="mb-4 w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+            className="mb-4 w-full rounded-full border px-3 py-2 outline-none"
             autoFocus
           />
         )}
@@ -54,14 +54,14 @@ const Modal: FC<Props> = ({
         <div className="flex justify-end gap-2">
           <button
             onClick={onCancel}
-            className="rounded-lg border px-4 py-2 hover:bg-gray-100"
+            className="rounded-full border px-4 py-2 hover:bg-gray-100"
           >
             Cancel
           </button>
           <button
             onClick={onConfirm}
             disabled={!isConfirmation && !value.trim()}
-            className={`rounded-lg px-4 py-2 text-white disabled:opacity-50 ${
+            className={`rounded-full px-4 py-2 text-white disabled:opacity-50 ${
               isConfirmation
                 ? "bg-red-600 hover:bg-red-700"
                 : "bg-blue-600 hover:bg-blue-700"

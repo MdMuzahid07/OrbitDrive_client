@@ -9,6 +9,7 @@ import {
 } from "../redux/features/fileSystem/fileSystem.slice";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { FileNode } from "../types";
+import { Skeleton } from "./ui/skeleton";
 
 const FileGrid: FC = () => {
   const dispatch = useAppDispatch();
@@ -49,8 +50,13 @@ const FileGrid: FC = () => {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-full w-full items-center justify-center">
-        <div className="text-gray-400">Loading...</div>
+      <div className="flex min-h-full w-full flex-wrap gap-10">
+        {Array.from({ length: 8 }).map((_, index) => (
+          <div key={index} className="flex flex-col items-center gap-2">
+            <Skeleton className="h-12 w-12 rounded-md" />
+            <Skeleton className="h-4 w-20 rounded-md" />
+          </div>
+        ))}
       </div>
     );
   }

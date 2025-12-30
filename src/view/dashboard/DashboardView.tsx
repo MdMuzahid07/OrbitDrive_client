@@ -11,17 +11,14 @@ import {
   useUpdateNodeMutation,
   useUploadFilesMutation,
 } from "@/redux/features/fileSystem/fileSystem.api";
-import {
-  setContextMenu,
-  toggleSidebar,
-} from "@/redux/features/fileSystem/fileSystem.slice";
+import { setContextMenu } from "@/redux/features/fileSystem/fileSystem.slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { Menu } from "lucide-react";
 import { FC, useEffect, useRef, useState } from "react";
 
 const DashboardView: FC = () => {
   const dispatch = useAppDispatch();
-  const { currentFolderId, contextMenu, sidebarOpen } = useAppSelector(
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const { currentFolderId, contextMenu } = useAppSelector(
     (state) => state.filesystem,
   );
 
@@ -125,19 +122,11 @@ const DashboardView: FC = () => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    const formData = new FormData();
     // Ensure parentId is "root" when at root level
     const parentId = currentFolderId || "root";
-    formData.append("parentId", parentId);
-
-    Array.from(files).forEach((file) => {
-      formData.append("files", file);
-    });
 
     try {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //@ts-ignore
-      await uploadFiles(formData).unwrap();
+      await uploadFiles({ files: Array.from(files), parentId }).unwrap();
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
@@ -177,7 +166,7 @@ const DashboardView: FC = () => {
       {sidebarOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/50 lg:hidden"
-          onClick={() => dispatch(toggleSidebar())}
+          onClick={() => setSidebarOpen(false)}
         />
       )}
 
@@ -195,17 +184,7 @@ const DashboardView: FC = () => {
       </div>
 
       <div className="flex flex-1 flex-col overflow-hidden transition-all duration-300">
-        <div className="flex">
-          <button
-            onClick={() => dispatch(toggleSidebar())}
-            className="flex shrink-0 rounded p-2 hover:bg-gray-100"
-            title="Toggle Sidebar"
-          >
-            <Menu size={20} />
-          </button>
-
-          <Breadcrumbs />
-        </div>
+        <Breadcrumbs sidebarToggle={() => setSidebarOpen(!sidebarOpen)} />
 
         <div className="container mx-auto flex-1 overflow-auto pt-4 md:pt-6">
           <FileGrid />

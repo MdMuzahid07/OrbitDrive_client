@@ -1,5 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
 import { Save, X } from "lucide-react";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useUpdateNodeMutation } from "../redux/features/fileSystem/fileSystem.api";
 import { setOpenFile } from "../redux/features/fileSystem/fileSystem.slice";
@@ -37,12 +37,12 @@ const FileViewer = () => {
 
   return (
     <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="max-h-[90vh] w-full max-w-4xl overflow-auto rounded-lg bg-white p-6 shadow-2xl">
-        <div className="mb-4 flex items-center justify-between">
+      <div className="max-h-[90vh] w-full max-w-4xl overflow-auto rounded-lg bg-white shadow-2xl">
+        <div className="flex items-center justify-between p-4">
           <h2 className="text-xl font-semibold">{openFile.name}</h2>
           <button
             onClick={handleClose}
-            className="rounded p-2 hover:bg-gray-100"
+            className="cursor-pointer rounded-full p-2 hover:bg-gray-100"
             title="Close"
           >
             <X size={20} />
@@ -50,30 +50,30 @@ const FileViewer = () => {
         </div>
 
         {openFile.type === "text" ? (
-          <div className="space-y-4">
+          <div className="px-4">
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              className="h-96 w-full rounded-lg border p-4 font-mono text-sm outline-none focus:ring-2 focus:ring-blue-500"
+              className="rounded-0 h-96 w-full bg-slate-100 p-2 font-mono text-sm outline-none"
               placeholder="Type here..."
             />
-            <button
-              onClick={handleSave}
-              disabled={isSaving}
-              className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
-            >
-              <Save size={18} />
-              {isSaving ? "Saving..." : "Save"}
-            </button>
+            <div className="flex justify-end">
+              <button
+                onClick={handleSave}
+                disabled={isSaving}
+                className="m-4 flex items-center gap-2 rounded-full bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
+              >
+                <Save size={18} />
+                {isSaving ? "Saving..." : "Save"}
+              </button>
+            </div>
           </div>
         ) : (
-          <div className="flex justify-center">
-            <Image
+          <div className="mb-10 flex justify-center">
+            <img
               src={openFile.url || ""}
               alt={openFile.name}
-              className="max-h-[70vh] max-w-full rounded-lg"
-              layout="responsive"
-              objectFit="contain"
+              className="max-h-[70vh] max-w-full rounded-lg object-contain"
             />
           </div>
         )}

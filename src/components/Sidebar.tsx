@@ -14,6 +14,7 @@ import {
   toggleFolderExpansion,
 } from "../redux/features/fileSystem/fileSystem.slice";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import SidebarSkeleton from "../skeleton/SidebarSkeleton";
 import { FileNode } from "../types";
 
 const Sidebar: FC = () => {
@@ -119,14 +120,7 @@ const Sidebar: FC = () => {
   }, [nodes]);
 
   if (isLoading) {
-    return (
-      <div className="flex h-full w-64 flex-col border-r bg-gray-50/50">
-        <div className="border-b bg-white p-4">
-          <h2 className="text-lg font-bold text-gray-900">Orbit Drive</h2>
-        </div>
-        <div className="p-4 text-sm text-gray-400">Loading...</div>
-      </div>
-    );
+    return <SidebarSkeleton />;
   }
 
   return (

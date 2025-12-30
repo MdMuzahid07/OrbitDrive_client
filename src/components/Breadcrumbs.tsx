@@ -1,10 +1,10 @@
-import { ChevronRight, Home } from "lucide-react";
-import { FC, Fragment } from "react";
+import { ChevronRight, Home, Menu } from "lucide-react";
+import { Fragment } from "react";
 import { useGetBreadcrumbsQuery } from "../redux/features/fileSystem/fileSystem.api";
 import { setCurrentFolderId } from "../redux/features/fileSystem/fileSystem.slice";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 
-const Breadcrumbs: FC = () => {
+const Breadcrumbs = ({ sidebarToggle }: { sidebarToggle: () => void }) => {
   const dispatch = useAppDispatch();
   const { currentFolderId } = useAppSelector((state) => state.filesystem);
 
@@ -19,6 +19,13 @@ const Breadcrumbs: FC = () => {
 
   return (
     <div className="flex h-15.25 items-center gap-2 overflow-x-auto border-b px-4 text-sm">
+      <button
+        onClick={sidebarToggle}
+        className="mr-5 flex shrink-0 rounded p-2 hover:bg-gray-100"
+        title="Toggle Sidebar"
+      >
+        <Menu size={20} />
+      </button>
       <Home
         size={16}
         className="shrink-0 cursor-pointer text-gray-600 hover:text-blue-600"

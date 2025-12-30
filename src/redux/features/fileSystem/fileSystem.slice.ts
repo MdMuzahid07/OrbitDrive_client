@@ -6,7 +6,6 @@ export interface FileSystemState {
   expandedFolders: string[];
   contextMenu: ContextMenuState | null;
   openFile: FileNode | null;
-  sidebarOpen: boolean;
 }
 
 const initialState: FileSystemState = {
@@ -14,7 +13,6 @@ const initialState: FileSystemState = {
   expandedFolders: ["root"],
   openFile: null,
   contextMenu: null,
-  sidebarOpen: true,
 };
 
 const fileSystemSlice = createSlice({
@@ -41,9 +39,6 @@ const fileSystemSlice = createSlice({
     setOpenFile: (state, action: PayloadAction<FileNode | null>) => {
       state.openFile = action.payload;
     },
-    toggleSidebar: (state) => {
-      state.sidebarOpen = !state.sidebarOpen;
-    },
   },
 });
 
@@ -53,7 +48,6 @@ export const {
   setExpandedFolders,
   setContextMenu,
   setOpenFile,
-  toggleSidebar,
 } = fileSystemSlice.actions;
 
 export default fileSystemSlice.reducer;
