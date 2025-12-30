@@ -11,13 +11,17 @@ import {
   useUpdateNodeMutation,
   useUploadFilesMutation,
 } from "@/redux/features/fileSystem/fileSystem.api";
-import { setContextMenu } from "@/redux/features/fileSystem/fileSystem.slice";
+import {
+  setContextMenu,
+  toggleSidebar,
+} from "@/redux/features/fileSystem/fileSystem.slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { Menu } from "lucide-react";
 import { FC, useEffect, useRef, useState } from "react";
 
 const DashboardView: FC = () => {
   const dispatch = useAppDispatch();
-  const { currentFolderId, contextMenu } = useAppSelector(
+  const { currentFolderId, contextMenu, sidebarOpen } = useAppSelector(
     (state) => state.filesystem,
   );
 
@@ -26,10 +30,15 @@ const DashboardView: FC = () => {
   const [deleteNode, { isLoading: isDeleting }] = useDeleteNodeMutation();
   const [uploadFiles, { isLoading: isUploading }] = useUploadFilesMutation();
 
-  const [modalState, setModalState] = useState({
+  const [modalState, setModalState] = useState<{
+    isOpen: boolean;
+    title: string;
+    type: "folder" | "text" | "" | "delete";
+    itemId?: string;
+  }>({
     isOpen: false,
     title: "",
-    type: "" as "folder" | "text" | "",
+    type: "",
   });
   const [itemName, setItemName] = useState("");
   const [renameId, setRenameId] = useState<string | null>(null);
@@ -48,7 +57,7 @@ const DashboardView: FC = () => {
   };
 
   const closeModal = () => {
-    setModalState({ isOpen: false, title: "", type: "" });
+    setModalState({ isOpen: false, title: "", type: "", itemId: undefined });
     setItemName("");
     setRenameId(null);
   };
@@ -62,6 +71,8 @@ const DashboardView: FC = () => {
 
       await createNode({
         name: itemName.trim(),
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
         type: modalState.type || "folder",
         parentId: parentId,
         content: modalState.type === "text" ? "" : undefined,
@@ -84,17 +95,23 @@ const DashboardView: FC = () => {
     }
   };
 
-  const handleDelete = async () => {
+  const handleDeleteClick = () => {
     if (!contextMenu?.itemId) return;
+    setModalState({
+      isOpen: true,
+      title: "Delete Item",
+      type: "delete",
+      itemId: contextMenu.itemId,
+    });
+    dispatch(setContextMenu(null));
+  };
 
-    const confirmed = window.confirm(
-      "Are you sure? This will delete the item and all its contents.",
-    );
-    if (!confirmed) return;
+  const handleDeleteConfirm = async () => {
+    if (!modalState.itemId) return;
 
     try {
-      await deleteNode(contextMenu.itemId).unwrap();
-      dispatch(setContextMenu(null));
+      await deleteNode(modalState.itemId).unwrap();
+      closeModal();
     } catch (error: any) {
       alert(error?.data?.message || "Failed to delete item");
     }
@@ -150,18 +167,47 @@ const DashboardView: FC = () => {
       dispatch(setContextMenu(null));
     },
     onDelete: () => {
-      handleDelete();
+      handleDeleteClick();
     },
   };
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-white">
-      <Sidebar />
+      {/* Mobile sidebar backdrop */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+          onClick={() => dispatch(toggleSidebar())}
+        />
+      )}
 
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <Breadcrumbs />
+      {/* Sidebar - responsive animated */}
+      <div
+        className={`fixed inset-y-0 left-0 z-50 h-full border-r bg-gray-50 transition-all duration-300 ease-in-out lg:relative lg:translate-x-0 ${
+          sidebarOpen
+            ? "w-64 translate-x-0"
+            : "w-64 -translate-x-full lg:w-0 lg:border-r-0"
+        } lg:overflow-hidden`}
+      >
+        <div className="h-full w-64">
+          <Sidebar />
+        </div>
+      </div>
 
-        <div className="container mx-auto flex-1 overflow-auto pt-10">
+      <div className="flex flex-1 flex-col overflow-hidden transition-all duration-300">
+        <div className="flex">
+          <button
+            onClick={() => dispatch(toggleSidebar())}
+            className="flex shrink-0 rounded p-2 hover:bg-gray-100"
+            title="Toggle Sidebar"
+          >
+            <Menu size={20} />
+          </button>
+
+          <Breadcrumbs />
+        </div>
+
+        <div className="container mx-auto flex-1 overflow-auto pt-4 md:pt-6">
           <FileGrid />
         </div>
       </div>
@@ -175,9 +221,22 @@ const DashboardView: FC = () => {
         title={modalState.title}
         value={itemName}
         onChange={setItemName}
-        onConfirm={renameId ? handleRename : handleCreate}
+        onConfirm={
+          modalState.type === "delete"
+            ? handleDeleteConfirm
+            : renameId
+              ? handleRename
+              : handleCreate
+        }
         onCancel={closeModal}
-        confirmText={renameId ? "Rename" : "Create"}
+        confirmText={
+          modalState.type === "delete"
+            ? "Delete"
+            : renameId
+              ? "Rename"
+              : "Create"
+        }
+        isConfirmation={modalState.type === "delete"}
       />
 
       <input
