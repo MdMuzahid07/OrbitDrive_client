@@ -10,20 +10,32 @@ import {
   REHYDRATE,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import authReducer from "./features/auth/auth.slice";
 import fileSystemApi from "./features/fileSystem/fileSystem.api";
 import fileSystemSlice from "./features/fileSystem/fileSystem.slice";
 
 const persistConfig = {
-  key: "fileSystem",
+  key: "root",
+  storage,
+  whitelist: ["auth", "filesystem"],
+};
+
+const authPersistConfig = {
+  key: "auth",
   storage,
 };
 
-const persistedReducer = persistReducer(persistConfig, fileSystemSlice);
+const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
+const persistedFileSystemReducer = persistReducer(
+  persistConfig,
+  fileSystemSlice,
+);
 
 export const store = configureStore({
   reducer: {
     [fileSystemApi.reducerPath]: fileSystemApi.reducer,
-    filesystem: persistedReducer,
+    filesystem: persistedFileSystemReducer,
+    auth: persistedAuthReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

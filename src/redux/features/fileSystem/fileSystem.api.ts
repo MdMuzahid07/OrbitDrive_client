@@ -6,14 +6,14 @@ import baseApi from "../../api/baseApi";
 const fileSystemApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllNodes: builder.query<FileNode[], void>({
-      query: () => "/all",
+      query: () => "/filesystem/all",
       transformResponse: (res: any) => res.data,
       providesTags: ["Nodes"],
     }),
 
     getNodesByParent: builder.query<FileNode[], string>({
       query: (parentId) => ({
-        url: "/",
+        url: "/filesystem",
         params: { parentId: parentId === "root" ? undefined : parentId },
       }),
       transformResponse: (res: any) => res.data,
@@ -24,7 +24,7 @@ const fileSystemApi = baseApi.injectEndpoints({
 
     createNode: builder.mutation<FileNode, CreateNodePayload>({
       query: (payload) => ({
-        url: "/",
+        url: "/filesystem",
         method: "POST",
         body: payload,
       }),
@@ -51,7 +51,7 @@ const fileSystemApi = baseApi.injectEndpoints({
         formData.append("parentId", parentId);
 
         return {
-          url: "/upload",
+          url: "/filesystem/upload",
           method: "POST",
           body: formData,
         };
@@ -65,7 +65,7 @@ const fileSystemApi = baseApi.injectEndpoints({
       { id: string; name?: string; content?: string }
     >({
       query: ({ id, ...payload }) => ({
-        url: `/${id}`,
+        url: `/filesystem/${id}`,
         method: "PATCH",
         body: payload,
       }),
@@ -75,7 +75,7 @@ const fileSystemApi = baseApi.injectEndpoints({
 
     deleteNode: builder.mutation<void, string>({
       query: (id) => ({
-        url: `/${id}`,
+        url: `/filesystem/${id}`,
         method: "DELETE",
       }),
       transformResponse: (res: any) => res.data,
@@ -84,7 +84,7 @@ const fileSystemApi = baseApi.injectEndpoints({
 
     getBreadcrumbs: builder.query<Array<{ _id: string; name: string }>, string>(
       {
-        query: (folderId) => `/${folderId}/breadcrumbs`,
+        query: (folderId) => `/filesystem/${folderId}/breadcrumbs`,
         transformResponse: (res: any) => res.data,
       },
     ),

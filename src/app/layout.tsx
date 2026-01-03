@@ -1,23 +1,49 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Orbitron } from "next/font/google";
 import ReduxProvider from "../provider/ReduxProvider";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const orbitron = Orbitron({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-orbitron",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "OrbitDrive",
-  description: "",
+  title: {
+    default: "OrbitDrive - Secure Cloud Storage",
+    template: "%s | OrbitDrive",
+  },
+  description:
+    "Store and manage your files securely with OrbitDrive. Access your data from anywhere.",
+  keywords: ["cloud storage", "file storage", "secure storage", "OrbitDrive"],
+  authors: [{ name: "OrbitDrive Team" }],
+
+  openGraph: {
+    title: "OrbitDrive - Secure Cloud Storage",
+    description: "Store and manage your files securely.",
+    type: "website",
+    locale: "en_US",
+    siteName: "OrbitDrive",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "OrbitDrive - Secure Cloud Storage",
+    description: "Store and manage your files securely.",
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+  },
+
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
@@ -27,9 +53,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${orbitron.variable} font-orbitron antialiased`}>
         <ReduxProvider>{children}</ReduxProvider>
       </body>
     </html>

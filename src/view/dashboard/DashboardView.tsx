@@ -13,6 +13,7 @@ import {
 } from "@/redux/features/fileSystem/fileSystem.api";
 import { setContextMenu } from "@/redux/features/fileSystem/fileSystem.slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { Loader2 } from "lucide-react";
 import { FC, useEffect, useRef, useState } from "react";
 
 const DashboardView: FC = () => {
@@ -161,40 +162,54 @@ const DashboardView: FC = () => {
   };
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-white">
+    <div className="bg-cyber-bg selection:bg-cyber-blue/30 relative flex h-screen w-full overflow-hidden font-sans selection:text-white">
+      {/* Background Pattern & Glow */}
+      <div className="bg-cyber-pattern absolute inset-0 opacity-50" />
+      <div className="bg-cyber-radial-glow absolute inset-0 opacity-60" />
+
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+          className="fixed inset-0 z-60 bg-black/60 backdrop-blur-sm transition-opacity lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar - responsive animated */}
-      <div
-        className={`fixed inset-y-0 left-0 z-50 h-full border-r bg-gray-50 transition-all duration-300 ease-in-out lg:relative lg:translate-x-0 ${
+      <aside
+        className={`fixed inset-y-0 left-0 z-70 h-full shadow-2xl transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] lg:relative lg:z-auto lg:translate-x-0 ${
           sidebarOpen
-            ? "w-64 translate-x-0"
-            : "w-64 -translate-x-full lg:w-0 lg:border-r-0"
-        } lg:overflow-hidden`}
+            ? "w-72 translate-x-0"
+            : "w-72 -translate-x-full lg:pointer-events-none lg:w-0 lg:opacity-0"
+        }`}
       >
-        <div className="h-full w-64">
+        <div className="glass-surface h-full w-full border-r border-white/5">
           <Sidebar />
         </div>
-      </div>
+      </aside>
 
-      <div className="flex flex-1 flex-col overflow-hidden transition-all duration-300">
+      {/* Main Content */}
+      <main
+        className="relative flex flex-1 flex-col overflow-hidden"
+        onContextMenu={(e) => {
+          e.preventDefault();
+          dispatch(
+            setContextMenu({ x: e.clientX, y: e.clientY, itemId: null }),
+          );
+        }}
+      >
         <Breadcrumbs sidebarToggle={() => setSidebarOpen(!sidebarOpen)} />
 
-        <div className="container mx-auto flex-1 overflow-auto pt-4 md:pt-6">
-          <FileGrid />
+        <div className="container mx-auto h-full overflow-auto px-4 py-6 md:px-8">
+          <div className="relative min-h-full">
+            <FileGrid />
+          </div>
         </div>
-      </div>
+      </main>
 
+      {/* Overlays & Modals */}
       <ContextMenu {...handleContextMenuActions} />
-
       <FileViewer />
-
       <Modal
         isOpen={modalState.isOpen}
         title={modalState.title}
@@ -227,15 +242,20 @@ const DashboardView: FC = () => {
         className="hidden"
       />
 
+      {/* Global Loading State */}
       {(isCreating || isDeleting || isUploading) && (
-        <div className="bg-opacity-30 fixed inset-0 z-50 flex items-center justify-center bg-black">
-          <div className="rounded-lg bg-white px-6 py-4 shadow-lg">
-            <div className="flex items-center gap-3">
-              <div className="h-5 w-5 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
-              <span className="text-sm font-medium text-gray-700">
-                {isCreating && "Creating..."}
-                {isDeleting && "Deleting..."}
-                {isUploading && "Uploading..."}
+        <div className="bg-cyber-bg/40 animate-in fade-in fixed inset-0 z-100 flex items-center justify-center backdrop-blur-md duration-300">
+          <div className="group relative">
+            <div className="bg-cyber-gradient absolute inset-0 animate-pulse rounded-full opacity-20 blur-xl transition-opacity group-hover:opacity-40" />
+            <div className="glass-surface relative flex flex-col items-center gap-4 rounded-3xl border border-white/10 p-8 shadow-2xl">
+              <div className="relative">
+                <Loader2 className="text-cyber-blue h-10 w-10 animate-spin" />
+                <div className="border-cyber-blue/30 absolute inset-0 animate-ping rounded-full border" />
+              </div>
+              <span className="text-sm font-bold tracking-widest text-white/50 uppercase">
+                {isCreating && "Creating Node..."}
+                {isDeleting && "Removing Data..."}
+                {isUploading && "Syncing Files..."}
               </span>
             </div>
           </div>

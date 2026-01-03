@@ -41,75 +41,89 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* Cyber Glow Colors */
+  --color-cyber-bg: hsl(var(--cyber-bg));
+  --color-cyber-surface: hsl(var(--cyber-surface));
+  --color-cyber-purple: hsl(var(--cyber-purple));
+  --color-cyber-blue: hsl(var(--cyber-blue));
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  /* Cyber Glow Palette */
+  --cyber-bg: 240 33% 4%;
+  --cyber-surface: 240 25% 7%;
+  --cyber-purple: 263 90% 66%;
+  --cyber-blue: 217 91% 60%;
+  --cyber-glow: 263 90% 66%;
+
+  /* Mapping to standard variables */
+  --background: var(--cyber-bg);
+  --foreground: 210 40% 98%;
+  --card: var(--cyber-surface);
+  --card-foreground: 210 40% 98%;
+  --popover: var(--cyber-surface);
+  --popover-foreground: 210 40% 98%;
+  --primary: var(--cyber-purple);
+  --primary-foreground: 210 40% 98%;
+  --secondary: 240 25% 12%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 240 25% 12%;
+  --muted-foreground: 215 20.2% 65.1%;
+  --accent: 240 25% 12%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 240 25% 15%;
+  --input: 240 25% 15%;
+  --ring: var(--cyber-purple);
+  --radius: 1.25rem;
+
+  /* Custom Cyber Gradients */
+  --cyber-gradient: linear-gradient(
+    135deg,
+    hsl(var(--cyber-purple)),
+    hsl(var(--cyber-blue))
+  );
+  --cyber-border-glow: 0 0 20px -5px hsl(var(--cyber-purple) / 0.5);
+
   --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --chart-2: oklch(0.6... 184.704);
+  --chart-3: oklch(0.398... 227.392);
+  --chart-4: oklch(0.828... 84.429);
+  --chart-5: oklch(0.769... 70.08);
+
+  /* Sidebar Theme - Dark for Cyber Glow */
+  --sidebar: var(--cyber-surface);
+  --sidebar-foreground: 210 40% 98%;
+  --sidebar-primary: var(--cyber-purple);
+  --sidebar-primary-foreground: 210 40% 98%;
+  --sidebar-accent: 240 25% 12%;
+  --sidebar-accent-foreground: 210 40% 98%;
+  --sidebar-border: 240 25% 15%;
+  --sidebar-ring: var(--cyber-purple);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: var(--cyber-bg);
+  --foreground: 210 40% 98%;
+  --card: var(--cyber-surface);
+  --card-foreground: 210 40% 98%;
+  --popover: var(--cyber-surface);
+  --popover-foreground: 210 40% 98%;
+  --primary: var(--cyber-purple);
+  --primary-foreground: 210 40% 98%;
+  --secondary: 240 25% 12%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 240 25% 12%;
+  --muted-foreground: 215 20.2% 65.1%;
+  --accent: 240 25% 12%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 240 25% 15%;
+  --input: 240 25% 15%;
+  --ring: var(--cyber-purple);
 }
 
 @layer base {
@@ -117,6 +131,38 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+@layer utilities {
+  .bg-cyber-gradient {
+    background: var(--cyber-gradient);
+  }
+
+  .bg-cyber-pattern {
+    background-color: hsl(var(--cyber-bg));
+    background-image: radial-gradient(
+      circle at 2px 2px,
+      hsl(var(--cyber-purple) / 0.15) 1px,
+      transparent 0
+    );
+    background-size: 24px 24px;
+  }
+
+  .bg-cyber-radial-glow {
+    background: radial-gradient(
+      circle at 50% 50%,
+      hsl(var(--cyber-purple) / 0.12),
+      transparent 70%
+    );
+  }
+
+  .cyber-glow-border {
+    @apply border-cyber-purple/20 shadow-[0_0_15px_-3px_rgba(139,92,246,0.3)];
+  }
+
+  .glass-surface {
+    @apply bg-cyber-surface/40 border border-white/5 backdrop-blur-2xl;
   }
 }
