@@ -168,7 +168,7 @@ const Sidebar: FC = () => {
               />
             </div>
           </div>
-          <h2 className="text-xl font-black tracking-tighter text-white uppercase">
+          <h2 className="font-orbitron text-xl font-black tracking-tighter text-white uppercase">
             Orbit<span className="text-cyber-blue">Drive</span>
           </h2>
         </div>

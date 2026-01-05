@@ -52,7 +52,7 @@ const FileViewer = () => {
                 )}
               </div>
               <div>
-                <h2 className="text-xl font-black tracking-tighter text-white uppercase">
+                <h2 className="font-orbitron text-xl font-black tracking-tighter text-white uppercase">
                   {openFile.name}
                 </h2>
                 <p className="text-[10px] font-bold tracking-widest text-white/30 uppercase">

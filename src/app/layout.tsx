@@ -53,7 +53,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${orbitron.variable} font-orbitron antialiased`}>
+      <body className={`${orbitron.className} antialiased`}>
         <ReduxProvider>{children}</ReduxProvider>
       </body>
     </html>
