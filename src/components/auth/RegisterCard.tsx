@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { GoogleLoginButton } from "./GoogleLoginButton";
 
 type RegisterFormInputs = {
   name: string;
@@ -215,6 +216,17 @@ export const RegisterCard = () => {
               </span>
             )}
           </Button>
+
+          <div className="relative my-6 md:my-8">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-white/5" />
+            </div>
+            <div className="relative flex justify-center text-[10px] font-bold tracking-[0.3em] text-white/20 uppercase">
+              <span className="bg-[#0D0D18] px-4">Or</span>
+            </div>
+          </div>
+
+          <GoogleLoginButton />
         </form>
 
         <p className="mt-6 text-center text-[15px] font-medium text-white/30 md:mt-10">
