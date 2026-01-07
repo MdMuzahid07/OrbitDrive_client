@@ -42,88 +42,113 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  /* Cyber Glow Colors */
-  --color-cyber-bg: hsl(var(--cyber-bg));
-  --color-cyber-surface: hsl(var(--cyber-surface));
-  --color-cyber-purple: hsl(var(--cyber-purple));
-  --color-cyber-blue: hsl(var(--cyber-blue));
+  /* Custom Colors: Dark Amethyst */
+  --color-dark-amethyst-50: #efedf8;
+  --color-dark-amethyst-100: #e0daf1;
+  --color-dark-amethyst-200: #c1b5e3;
+  --color-dark-amethyst-300: #a190d5;
+  --color-dark-amethyst-400: #826bc7;
+  --color-dark-amethyst-500: #6346b9;
+  --color-dark-amethyst-600: #4f3894;
+  --color-dark-amethyst-700: #3b2a6f;
+  --color-dark-amethyst-800: #281c4a;
+  --color-dark-amethyst-900: #140e25;
+  --color-dark-amethyst-950: #0e0a1a;
+
+  --color-cyber-purple: #826bc7; /* amethyst-400 */
+  --color-cyber-blue: #a190d5; /* amethyst-300 */
 }
 
 :root {
-  /* Cyber Glow Palette */
-  --cyber-bg: 240 33% 4%;
-  --cyber-surface: 240 25% 7%;
-  --cyber-purple: 263 90% 66%;
-  --cyber-blue: 217 91% 60%;
-  --cyber-glow: 263 90% 66%;
+  /* Dark Amethyst - Light Mode */
+  --background: #efedf8; /* amethyst-50 */
+  --foreground: #140e25; /* amethyst-900 */
 
-  /* Mapping to standard variables */
-  --background: var(--cyber-bg);
-  --foreground: 210 40% 98%;
-  --card: var(--cyber-surface);
-  --card-foreground: 210 40% 98%;
-  --popover: var(--cyber-surface);
-  --popover-foreground: 210 40% 98%;
-  --primary: var(--cyber-purple);
-  --primary-foreground: 210 40% 98%;
-  --secondary: 240 25% 12%;
-  --secondary-foreground: 210 40% 98%;
-  --muted: 240 25% 12%;
-  --muted-foreground: 215 20.2% 65.1%;
-  --accent: 240 25% 12%;
-  --accent-foreground: 210 40% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 240 25% 15%;
-  --input: 240 25% 15%;
-  --ring: var(--cyber-purple);
-  --radius: 1.25rem;
+  --card: #ffffff;
+  --card-foreground: #140e25;
 
-  /* Custom Cyber Gradients */
-  --cyber-gradient: linear-gradient(
-    135deg,
-    hsl(var(--cyber-purple)),
-    hsl(var(--cyber-blue))
-  );
-  --cyber-border-glow: 0 0 20px -5px hsl(var(--cyber-purple) / 0.5);
+  --popover: #ffffff;
+  --popover-foreground: #140e25;
 
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6... 184.704);
-  --chart-3: oklch(0.398... 227.392);
-  --chart-4: oklch(0.828... 84.429);
-  --chart-5: oklch(0.769... 70.08);
+  --primary: #4f3894; /* amethyst-600 */
+  --primary-foreground: #ffffff;
 
-  /* Sidebar Theme - Dark for Cyber Glow */
-  --sidebar: var(--cyber-surface);
-  --sidebar-foreground: 210 40% 98%;
-  --sidebar-primary: var(--cyber-purple);
-  --sidebar-primary-foreground: 210 40% 98%;
-  --sidebar-accent: 240 25% 12%;
-  --sidebar-accent-foreground: 210 40% 98%;
-  --sidebar-border: 240 25% 15%;
-  --sidebar-ring: var(--cyber-purple);
+  --secondary: #e0daf1; /* amethyst-100 */
+  --secondary-foreground: #281c4a; /* amethyst-800 */
+
+  --muted: #e0daf1; /* amethyst-100 */
+  --muted-foreground: #4f3894; /* amethyst-600 */
+
+  --accent: #e0daf1; /* amethyst-100 */
+  --accent-foreground: #281c4a; /* amethyst-800 */
+
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: #ffffff;
+
+  --border: #c1b5e3; /* amethyst-200 */
+  --input: #c1b5e3; /* amethyst-200 */
+  --ring: #826bc7; /* amethyst-400 */
+
+  --radius: 0.75rem;
+
+  /* Sidebar - Light */
+  --sidebar: #ffffff;
+  --sidebar-foreground: #140e25;
+  --sidebar-primary: #4f3894;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #efedf8; /* amethyst-50 */
+  --sidebar-accent-foreground: #4f3894;
+  --sidebar-border: #e0daf1; /* amethyst-100 */
+  --sidebar-ring: #c1b5e3;
+
+  /* Cyber Gradients (Adapted for Light) */
+  --cyber-gradient: linear-gradient(135deg, #a190d5, #826bc7);
+  --cyber-border-glow: 0 0 20px -5px rgba(130, 107, 199, 0.3);
 }
 
 .dark {
-  --background: var(--cyber-bg);
-  --foreground: 210 40% 98%;
-  --card: var(--cyber-surface);
-  --card-foreground: 210 40% 98%;
-  --popover: var(--cyber-surface);
-  --popover-foreground: 210 40% 98%;
-  --primary: var(--cyber-purple);
-  --primary-foreground: 210 40% 98%;
-  --secondary: 240 25% 12%;
-  --secondary-foreground: 210 40% 98%;
-  --muted: 240 25% 12%;
-  --muted-foreground: 215 20.2% 65.1%;
-  --accent: 240 25% 12%;
-  --accent-foreground: 210 40% 98%;
+  /* Dark Amethyst - Dark Mode */
+  --background: #0e0a1a; /* amethyst-950 */
+  --foreground: #e0daf1; /* amethyst-100 */
+
+  --card: #140e25; /* amethyst-900 */
+  --card-foreground: #e0daf1;
+
+  --popover: #140e25;
+  --popover-foreground: #e0daf1;
+
+  --primary: #826bc7; /* amethyst-400 (lighter for dark mode) */
+  --primary-foreground: #0e0a1a;
+
+  --secondary: #281c4a; /* amethyst-800 */
+  --secondary-foreground: #e0daf1;
+
+  --muted: #281c4a; /* amethyst-800 */
+  --muted-foreground: #a190d5; /* amethyst-300 */
+
+  --accent: #281c4a; /* amethyst-800 */
+  --accent-foreground: #e0daf1;
+
   --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 240 25% 15%;
-  --input: 240 25% 15%;
-  --ring: var(--cyber-purple);
+  --destructive-foreground: #e0daf1;
+
+  --border: #281c4a; /* amethyst-800 */
+  --input: #281c4a; /* amethyst-800 */
+  --ring: #4f3894; /* amethyst-600 */
+
+  /* Sidebar - Dark */
+  --sidebar: #140e25; /* amethyst-900 */
+  --sidebar-foreground: #e0daf1;
+  --sidebar-primary: #826bc7;
+  --sidebar-primary-foreground: #0e0a1a;
+  --sidebar-accent: #281c4a; /* amethyst-800 */
+  --sidebar-accent-foreground: #e0daf1;
+  --sidebar-border: #281c4a;
+  --sidebar-ring: #4f3894;
+
+  /* Cyber Gradients (Adapted for Dark) */
+  --cyber-gradient: linear-gradient(135deg, #4f3894, #3b2a6f);
+  --cyber-border-glow: 0 0 20px -5px rgba(130, 107, 199, 0.5);
 }
 
 @layer base {
@@ -141,28 +166,20 @@
   }
 
   .bg-cyber-pattern {
-    background-color: hsl(var(--cyber-bg));
+    background-color: var(--background);
     background-image: radial-gradient(
       circle at 2px 2px,
-      hsl(var(--cyber-purple) / 0.15) 1px,
+      rgba(139, 122, 184, 0.15) 1px,
       transparent 0
     );
     background-size: 24px 24px;
   }
 
-  .bg-cyber-radial-glow {
-    background: radial-gradient(
-      circle at 50% 50%,
-      hsl(var(--cyber-purple) / 0.12),
-      transparent 70%
-    );
-  }
-
   .cyber-glow-border {
-    @apply border-cyber-purple/20 shadow-[0_0_15px_-3px_rgba(139,92,246,0.3)];
+    @apply border-primary/20 shadow-primary/10 shadow-lg;
   }
 
   .glass-surface {
-    @apply bg-cyber-surface/40 border border-white/5 backdrop-blur-2xl;
+    @apply bg-card/40 border-border/50 border backdrop-blur-2xl;
   }
 }

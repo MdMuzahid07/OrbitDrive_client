@@ -23,7 +23,7 @@ const ContextMenu: FC<Props> = ({
 
   return (
     <div
-      className="fixed z-50 min-w-45 rounded-lg border bg-white py-2 shadow-lg"
+      className="border-border bg-popover text-popover-foreground animate-in zoom-in-95 fixed z-50 min-w-45 rounded-lg border py-2 shadow-lg duration-200"
       style={{ left: contextMenu.x, top: contextMenu.y }}
       onClick={(e) => e.stopPropagation()}
     >
@@ -31,22 +31,22 @@ const ContextMenu: FC<Props> = ({
         <>
           <button
             onClick={onCreateFolder}
-            className="flex w-full cursor-pointer items-center gap-2 px-4 py-2 text-left text-sm hover:bg-gray-100"
+            className="hover:bg-accent hover:text-accent-foreground flex w-full cursor-pointer items-center gap-2 px-4 py-2 text-left text-sm transition-colors"
           >
             <Folder size={16} />
             New Folder
           </button>
           <button
             onClick={onCreateText}
-            className="flex w-full cursor-pointer items-center gap-2 px-4 py-2 text-left text-sm hover:bg-gray-100"
+            className="hover:bg-accent hover:text-accent-foreground flex w-full cursor-pointer items-center gap-2 px-4 py-2 text-left text-sm transition-colors"
           >
             <FileText size={16} />
             New Text File
           </button>
-          <hr className="my-1" />
+          <hr className="border-border my-1" />
           <button
             onClick={onUpload}
-            className="flex w-full cursor-pointer items-center gap-2 px-4 py-2 text-left text-sm hover:bg-gray-100"
+            className="hover:bg-accent hover:text-accent-foreground flex w-full cursor-pointer items-center gap-2 px-4 py-2 text-left text-sm transition-colors"
           >
             <Upload size={16} />
             Upload Files
@@ -56,13 +56,13 @@ const ContextMenu: FC<Props> = ({
         <>
           <button
             onClick={onRename}
-            className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100"
+            className="hover:bg-accent hover:text-accent-foreground w-full px-4 py-2 text-left text-sm transition-colors"
           >
             Rename
           </button>
           <button
             onClick={onDelete}
-            className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50"
+            className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
           >
             Delete
           </button>

@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Orbitron } from "next/font/google";
-import ReduxProvider from "../provider/ReduxProvider";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
+import { ThemeProvider } from "@/components/theme-provider";
+import ReduxProvider from "../provider/ReduxProvider";
 import "./globals.css";
 
 const orbitron = Orbitron({
@@ -54,7 +55,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${orbitron.className} antialiased`}>
-        <ReduxProvider>{children}</ReduxProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <ReduxProvider>{children}</ReduxProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

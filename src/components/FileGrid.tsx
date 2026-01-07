@@ -53,8 +53,8 @@ const FileGrid: FC = () => {
       <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
         {Array.from({ length: 12 }).map((_, index) => (
           <div key={index} className="flex flex-col items-center gap-3">
-            <Skeleton className="h-24 w-full rounded-3xl bg-white/3" />
-            <Skeleton className="h-4 w-2/3 rounded-full bg-white/3" />
+            <Skeleton className="bg-secondary/50 h-24 w-full rounded-3xl" />
+            <Skeleton className="bg-secondary/50 h-4 w-2/3 rounded-full" />
           </div>
         ))}
       </div>
@@ -69,14 +69,14 @@ const FileGrid: FC = () => {
       >
         <div className="relative mb-8">
           <div className="bg-cyber-gradient absolute inset-0 animate-pulse rounded-full opacity-10 blur-3xl" />
-          <div className="relative flex h-32 w-32 items-center justify-center rounded-3xl border border-white/5 bg-white/2 shadow-2xl">
-            <Folder size={64} className="text-white/10" />
+          <div className="border-border bg-card/50 relative flex h-32 w-32 items-center justify-center rounded-3xl border shadow-2xl">
+            <Folder size={64} className="text-muted-foreground/20" />
           </div>
         </div>
-        <h3 className="text-xl font-black tracking-tight text-white/40 uppercase">
+        <h3 className="text-muted-foreground/50 text-xl font-black tracking-tight uppercase">
           This folder is empty
         </h3>
-        <p className="mt-2 text-sm font-medium text-white/20">
+        <p className="text-muted-foreground/40 mt-2 text-sm font-medium">
           Right-click anywhere to create new items
         </p>
       </div>
@@ -91,7 +91,7 @@ const FileGrid: FC = () => {
       {currentChildren.map((item: FileNode) => (
         <div
           key={item._id}
-          className="group relative h-full cursor-pointer rounded-3xl border border-white/5 bg-white/2 p-4 transition-all duration-300 hover:-translate-y-1 hover:bg-white/6 hover:shadow-[0_0_30px_-10px_rgba(139,92,246,0.3)]"
+          className="group border-border bg-card/50 hover:bg-accent/50 hover:shadow-primary/5 relative h-full cursor-pointer rounded-3xl border p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
           onClick={() => handleItemClick(item)}
           onContextMenu={(e) => handleContextMenu(e, item._id)}
         >
@@ -111,17 +111,17 @@ const FileGrid: FC = () => {
               ) : item.type === "image" ? (
                 <FileImage
                   size={48}
-                  className="text-emerald-400 transition-transform group-hover:scale-110"
+                  className="text-emerald-500 transition-transform group-hover:scale-110"
                 />
               ) : (
                 <FileText
                   size={48}
-                  className="text-cyber-purple transition-transform group-hover:scale-110"
+                  className="text-primary transition-transform group-hover:scale-110"
                 />
               )}
             </div>
 
-            <span className="w-full truncate text-center text-xs font-bold tracking-tight text-white/50 transition-colors group-hover:text-white">
+            <span className="text-muted-foreground group-hover:text-foreground w-full truncate text-center text-xs font-bold tracking-tight transition-colors">
               {item.name}
             </span>
           </div>

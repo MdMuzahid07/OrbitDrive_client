@@ -23,6 +23,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import SidebarSkeleton from "../skeleton/SidebarSkeleton";
 import { FileNode } from "../types";
+import { ThemeToggle } from "./ThemeToggle";
 
 const Sidebar: FC = () => {
   const dispatch = useAppDispatch();
@@ -91,8 +92,8 @@ const Sidebar: FC = () => {
         <div
           className={`flex cursor-pointer items-center gap-2.5 rounded-xl px-3 py-2 transition-all duration-200 ${
             isActive
-              ? "bg-cyber-gradient text-white shadow-[0_0_15px_-3px_rgba(139,92,246,0.3)]"
-              : "text-white/50 hover:bg-white/5 hover:text-white/80"
+              ? "bg-cyber-gradient shadow-primary/20 text-white shadow-lg"
+              : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
           }`}
           style={{ marginLeft: `${level * 12}px` }}
           onClick={handleClick}
@@ -101,7 +102,7 @@ const Sidebar: FC = () => {
           {node.type === "folder" ? (
             <button
               onClick={handleToggle}
-              className={`rounded-md p-0.5 transition-colors ${isActive ? "text-white/70 hover:text-white" : "text-white/20 hover:text-white/40"}`}
+              className={`rounded-md p-0.5 transition-colors ${isActive ? "text-white/70 hover:text-white" : "text-sidebar-foreground/40 hover:text-sidebar-foreground/80"}`}
             >
               {isExpanded ? (
                 <ChevronDown size={14} />
@@ -116,17 +117,17 @@ const Sidebar: FC = () => {
           {node.type === "folder" ? (
             <Folder
               size={18}
-              className={`shrink-0 transition-colors ${isActive ? "text-white" : "text-cyber-blue"}`}
+              className={`shrink-0 transition-colors ${isActive ? "text-white" : "text-primary"}`}
             />
           ) : node.type === "image" ? (
             <FileImage
               size={18}
-              className={`shrink-0 transition-colors ${isActive ? "text-white" : "text-emerald-400"}`}
+              className={`shrink-0 transition-colors ${isActive ? "text-white" : "text-emerald-500"}`}
             />
           ) : (
             <FileText
               size={18}
-              className={`shrink-0 transition-colors ${isActive ? "text-white" : "text-cyber-purple"}`}
+              className={`shrink-0 transition-colors ${isActive ? "text-white" : "text-primary"}`}
             />
           )}
 
@@ -152,40 +153,43 @@ const Sidebar: FC = () => {
   }
 
   return (
-    <div className="flex h-full flex-col bg-transparent">
+    <div className="bg-sidebar border-sidebar-border/50 flex h-full flex-col border-r">
       {/* Sidebar Header */}
       <div className="px-6 py-8">
-        <div className="group flex items-center gap-3">
-          <div className="relative">
-            <div className="bg-cyber-gradient absolute inset-0 rounded-xl opacity-40 blur-lg transition-opacity group-hover:opacity-60" />
-            <div className="bg-cyber-gradient shadow-cyber-purple/20 relative flex h-10 w-10 items-center justify-center rounded-xl text-white shadow-xl">
-              <Image
-                src="/images/OrbitDrive_logo-300x300.png"
-                alt="OrbitDrive Logo"
-                width={40}
-                height={40}
-                className="rounded-xl"
-              />
+        <div className="group flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <div className="bg-cyber-gradient absolute inset-0 rounded-xl opacity-40 blur-lg transition-opacity group-hover:opacity-60" />
+              <div className="bg-cyber-gradient shadow-primary/20 relative flex h-10 w-10 items-center justify-center rounded-xl text-white shadow-xl">
+                <Image
+                  src="/images/OrbitDrive_logo-300x300.png"
+                  alt="OrbitDrive Logo"
+                  width={40}
+                  height={40}
+                  className="rounded-xl"
+                />
+              </div>
             </div>
+            <h2 className="font-orbitron text-sidebar-foreground text-xl font-black tracking-tighter uppercase">
+              Orbit<span className="text-primary">Drive</span>
+            </h2>
           </div>
-          <h2 className="font-orbitron text-xl font-black tracking-tighter text-white uppercase">
-            Orbit<span className="text-cyber-blue">Drive</span>
-          </h2>
+          <ThemeToggle />
         </div>
       </div>
 
       {/* Tree Content */}
       <div className="custom-scrollbar flex-1 overflow-y-auto px-4">
         <div className="mb-4">
-          <p className="mb-4 px-3 text-[10px] font-bold tracking-[0.2em] text-white/20 uppercase">
+          <p className="text-sidebar-foreground/70 mb-4 px-3 text-[10px] font-bold tracking-[0.2em] uppercase">
             Storage Explorer
           </p>
           <div className="space-y-1">
             {rootNodes.length > 0 ? (
               rootNodes.map((n) => renderTree(n._id))
             ) : (
-              <div className="rounded-2xl border border-dashed border-white/5 bg-white/2 px-3 py-8 text-center">
-                <p className="text-xs font-medium text-white/20">
+              <div className="border-sidebar-border bg-sidebar-accent/50 rounded-2xl border border-dashed px-3 py-8 text-center">
+                <p className="text-sidebar-foreground/40 text-xs font-medium">
                   No elements discovered
                 </p>
               </div>
@@ -196,19 +200,19 @@ const Sidebar: FC = () => {
 
       {/* User Section */}
       <div className="mt-auto p-4">
-        <div className="group/user relative items-center gap-3 rounded-4xl border border-white/5 bg-white/3 p-4 backdrop-blur-xl transition-all hover:bg-white/6">
+        <div className="group/user border-sidebar-border bg-sidebar-accent/50 hover:bg-sidebar-accent relative items-center gap-3 rounded-4xl border p-4 backdrop-blur-xl transition-all">
           <div className="mb-4 flex items-center gap-3">
             <div className="relative">
               <div className="bg-cyber-gradient absolute inset-0 rounded-full opacity-0 blur transition-opacity group-hover/user:opacity-40" />
-              <div className="bg-cyber-surface relative flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-white shadow-inner">
+              <div className="bg-card border-sidebar-border text-sidebar-foreground relative flex h-10 w-10 items-center justify-center rounded-full border shadow-sm">
                 <UserIcon size={18} />
               </div>
             </div>
             <div className="flex-1 overflow-hidden">
-              <p className="truncate text-sm font-bold tracking-tight text-white">
+              <p className="text-sidebar-foreground truncate text-sm font-bold tracking-tight">
                 {user?.name || "Guest User"}
               </p>
-              <p className="truncate text-[10px] font-medium tracking-wider text-white/30 uppercase">
+              <p className="text-sidebar-foreground/70 truncate text-[10px] font-medium tracking-wider uppercase">
                 User Profile
               </p>
             </div>
@@ -217,10 +221,13 @@ const Sidebar: FC = () => {
           <button
             onClick={handleLogout}
             disabled={isLoggingOut}
-            className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-white/5 py-2.5 text-xs font-bold text-white transition-all hover:bg-red-500/10 hover:text-red-400 active:scale-[0.98] disabled:opacity-50"
+            className="group bg-sidebar-foreground/5 text-sidebar-foreground relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl py-2.5 text-xs font-bold transition-all hover:bg-red-500/10 hover:text-red-500 active:scale-[0.98] disabled:opacity-50"
           >
             {isLoggingOut ? (
-              <Loader2 size={16} className="animate-spin text-white/50" />
+              <Loader2
+                size={16}
+                className="text-sidebar-foreground/50 animate-spin"
+              />
             ) : (
               <>
                 <LogOut

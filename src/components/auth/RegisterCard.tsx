@@ -1,42 +1,60 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-
-import { useRegisterMutation } from "@/redux/features/auth/auth.api";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  selectIsAuthenticated,
-  setCredentials,
-} from "@/redux/features/auth/auth.slice";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { ArrowRight, Loader2, Mail, ShieldCheck, User } from "lucide-react";
+  ArrowRight,
+  Eye,
+  EyeOff,
+  Loader2,
+  Lock,
+  Mail,
+  ShieldCheck,
+  User,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
+import { useRegisterMutation } from "@/redux/features/auth/auth.api";
+import { useAppSelector } from "@/redux/hooks";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { GoogleLoginButton } from "./GoogleLoginButton";
 
-type RegisterFormInputs = {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
+// Validation Schema
+const registerSchema = z
+  .object({
+    name: z.string().min(2, "Name must be at least 2 characters"),
+    email: z.string().email("Invalid email address"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords must match",
+    path: ["confirmPassword"],
+  });
 
-export const RegisterCard = () => {
+type RegisterFormInputs = z.infer<typeof registerSchema>;
+
+export const RegisterCard: FC = () => {
+  const router = useRouter();
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const [registerAccount, { isLoading, error }] = useRegisterMutation();
+  const [showPassword, setShowPassword] = useState({
+    password: false,
+    confirmPassword: false,
+  });
+
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-  } = useForm<RegisterFormInputs>();
-
-  const dispatch = useAppDispatch();
-  const router = useRouter();
-  const isAuthenticated = useAppSelector(selectIsAuthenticated);
-  const [registerAccount, { isLoading, error }] = useRegisterMutation();
-
-  const password = watch("password");
+  } = useForm<RegisterFormInputs>({
+    resolver: zodResolver(registerSchema),
+  });
 
   useEffect(() => {
     if (isAuthenticated) router.push("/");
@@ -44,47 +62,42 @@ export const RegisterCard = () => {
 
   const onSubmit = async (data: RegisterFormInputs) => {
     try {
-      const result = await registerAccount(data).unwrap();
-      dispatch(
-        setCredentials({ user: result.user, accessToken: result.accessToken }),
-      );
-      router.push("/");
-    } catch (err) {
-      console.error("Registration failed:", err);
+      await registerAccount(data).unwrap();
+      toast.success("Account created! Please check your email to verify.");
+      router.push("/login?registered=true");
+    } catch (err: any) {
+      toast.error(err.data?.message || "Registration failed");
     }
   };
 
   return (
-    <div className="w-full">
-      <div className="bg-cyber-surface/80 relative rounded-[2.5rem] border border-white/5 p-6 shadow-[0_0_50px_-12px_rgba(139,92,246,0.3)] ring-1 ring-white/10 backdrop-blur-xl md:p-12">
+    <div className="mx-auto w-full max-w-[500px]">
+      <div className="bg-card/80 border-border shadow-primary/5 ring-border/50 relative rounded-[2rem] border p-6 shadow-xl ring-1 backdrop-blur-xl md:p-8">
         {/* Glowing Header Icon */}
-        <div className="mb-6 flex flex-col items-center md:mb-10">
-          <div className="relative mb-4 md:mb-6">
+        <div className="mb-5 flex flex-col items-center md:mb-8">
+          <div className="relative mb-3 md:mb-4">
             <div className="bg-cyber-gradient absolute inset-0 animate-pulse rounded-2xl opacity-40 blur-xl" />
-            <div className="bg-cyber-gradient shadow-cyber-purple/20 relative flex h-12 w-12 items-center justify-center rounded-2xl shadow-lg md:h-16 md:w-16">
-              <ShieldCheck className="h-6 w-6 text-white md:h-8 md:w-8" />
+            <div className="bg-cyber-gradient shadow-primary/20 relative flex h-10 w-10 items-center justify-center rounded-2xl shadow-lg md:h-12 md:w-12">
+              <ShieldCheck className="h-5 w-5 text-white md:h-6 md:w-6" />
             </div>
           </div>
-          <h1 className="text-center text-2xl font-bold tracking-tight text-white md:text-3xl">
+          <h1 className="text-card-foreground text-center text-xl font-bold tracking-tight md:text-2xl">
             Create Account
           </h1>
-          <p className="mt-2 text-center font-medium text-white/40">
+          <p className="text-muted-foreground mt-1.5 text-center text-sm font-medium">
             Join the OrbitDrive cosmos today
           </p>
         </div>
 
         {/* Form */}
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="space-y-4 md:space-y-5"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-3.5">
           {/* Name */}
-          <div className="space-y-2">
-            <label className="ml-1 text-[11px] font-bold tracking-[0.2em] text-white/30 uppercase">
+          <div className="space-y-1.5">
+            <label className="text-muted-foreground ml-1 text-[10px] font-bold tracking-[0.2em] uppercase">
               Full Name
             </label>
             <div className="group relative">
-              <User className="group-focus-within:text-cyber-blue absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-white/20 transition-colors" />
+              <User className="group-focus-within:text-primary text-muted-foreground absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 transition-colors" />
               <Input
                 type="text"
                 placeholder="John Doe"
@@ -95,23 +108,23 @@ export const RegisterCard = () => {
                     message: "Name must be at least 2 characters",
                   },
                 })}
-                className={`focus:border-cyber-blue/50 focus:ring-cyber-blue/10 selection:bg-cyber-blue/30 h-11 rounded-2xl border-white/5 bg-white/3 pl-12 text-base text-white transition-all placeholder:text-white/10 focus:ring-4 md:h-13 ${errors.name ? "border-red-500/50 ring-red-500/10 focus:border-red-500/50 focus:ring-red-500/10" : ""}`}
+                className={`focus:border-primary/50 focus:ring-primary/10 selection:bg-primary/30 border-border bg-background/50 text-foreground placeholder:text-muted-foreground/50 h-10 rounded-xl pl-10 text-sm transition-all focus:ring-2 md:h-11 ${errors.name ? "border-red-500/50 ring-red-500/10 focus:border-red-500/50 focus:ring-red-500/10" : ""}`}
               />
             </div>
             {errors.name && (
-              <p className="mt-1 ml-1 text-[10px] font-bold text-red-400/80">
+              <p className="mt-1 ml-1 text-[10px] font-bold text-red-500/80">
                 {errors.name.message}
               </p>
             )}
           </div>
 
           {/* Email */}
-          <div className="space-y-2">
-            <label className="ml-1 text-[11px] font-bold tracking-[0.2em] text-white/30 uppercase">
+          <div className="space-y-1.5">
+            <label className="text-muted-foreground ml-1 text-[10px] font-bold tracking-[0.2em] uppercase">
               Email Address
             </label>
             <div className="group relative">
-              <Mail className="group-focus-within:text-cyber-blue absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-white/20 transition-colors" />
+              <Mail className="group-focus-within:text-primary text-muted-foreground absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 transition-colors" />
               <Input
                 type="email"
                 placeholder="name@example.com"
@@ -122,56 +135,91 @@ export const RegisterCard = () => {
                     message: "Invalid email address",
                   },
                 })}
-                className={`focus:border-cyber-blue/50 focus:ring-cyber-blue/10 selection:bg-cyber-blue/30 h-11 rounded-2xl border-white/5 bg-white/3 pl-12 text-base text-white transition-all placeholder:text-white/10 focus:ring-4 md:h-13 ${errors.email ? "border-red-500/50 ring-red-500/10 focus:border-red-500/50 focus:ring-red-500/10" : ""}`}
+                className={`focus:border-primary/50 focus:ring-primary/10 selection:bg-primary/30 border-border bg-background/50 text-foreground placeholder:text-muted-foreground/50 h-10 rounded-xl pl-10 text-sm transition-all focus:ring-2 md:h-11 ${errors.email ? "border-red-500/50 ring-red-500/10 focus:border-red-500/50 focus:ring-red-500/10" : ""}`}
               />
             </div>
             {errors.email && (
-              <p className="mt-1 ml-1 text-[10px] font-bold text-red-400/80">
+              <p className="mt-1 ml-1 text-[10px] font-bold text-red-500/80">
                 {errors.email.message}
               </p>
             )}
           </div>
 
           {/* Passwords */}
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div className="space-y-2">
-              <label className="ml-1 text-[11px] font-bold tracking-[0.2em] text-white/30 uppercase">
+          <div className="grid grid-cols-1 gap-3.5 md:grid-cols-2">
+            <div className="space-y-1.5">
+              <label className="text-muted-foreground ml-1 text-[10px] font-bold tracking-[0.2em] uppercase">
                 Password
               </label>
-              <Input
-                type="password"
-                placeholder="••••••••"
-                {...register("password", {
-                  required: "Password is required",
-                  minLength: {
-                    value: 8,
-                    message: "Password must be at least 8 characters",
-                  },
-                })}
-                className={`focus:border-cyber-blue/50 focus:ring-cyber-blue/10 selection:bg-cyber-blue/30 h-11 rounded-2xl border-white/5 bg-white/3 text-base text-white transition-all placeholder:text-white/10 focus:ring-4 md:h-13 ${errors.password ? "border-red-500/50 ring-red-500/10 focus:border-red-500/50 focus:ring-red-500/10" : ""}`}
-              />
+              <div className="relative">
+                <Lock className="text-muted-foreground absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2" />
+                <input
+                  type={showPassword.password ? "text" : "password"}
+                  placeholder="••••••••"
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 8,
+                      message: "Password must be at least 8 characters",
+                    },
+                  })}
+                  className={`border-border bg-background/50 text-foreground placeholder:text-muted-foreground/50 focus:border-primary/50 focus:ring-primary/10 w-full rounded-xl border py-2.5 pr-10 pl-10 text-sm transition-all focus:ring-2 md:h-11 ${errors.password ? "border-red-500/50 ring-red-500/10 focus:border-red-500/50 focus:ring-red-500/10" : ""}`}
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setShowPassword((prev) => ({
+                      ...prev,
+                      password: !prev.password,
+                    }))
+                  }
+                  className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3.5 -translate-y-1/2 focus:outline-none"
+                >
+                  {showPassword.password ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </button>
+              </div>
               {errors.password && (
-                <p className="mt-1 ml-1 text-[10px] font-bold text-red-400/80">
+                <p className="mt-1 ml-1 text-[10px] font-bold text-red-500/80">
                   {errors.password.message}
                 </p>
               )}
             </div>
-            <div className="space-y-2">
-              <label className="ml-1 text-[11px] font-bold tracking-[0.2em] text-white/30 uppercase">
+            <div className="space-y-1.5">
+              <label className="text-muted-foreground ml-1 text-[10px] font-bold tracking-[0.2em] uppercase">
                 Confirm
               </label>
-              <Input
-                type="password"
-                placeholder="••••••••"
-                {...register("confirmPassword", {
-                  required: "Please confirm your password",
-                  validate: (value) =>
-                    value === password || "Passwords do not match",
-                })}
-                className={`focus:border-cyber-blue/50 focus:ring-cyber-blue/10 selection:bg-cyber-blue/30 h-11 rounded-2xl border-white/5 bg-white/3 text-base text-white transition-all placeholder:text-white/10 focus:ring-4 md:h-13 ${errors.confirmPassword ? "border-red-500/50 ring-red-500/10 focus:border-red-500/50 focus:ring-red-500/10" : ""}`}
-              />
+              <div className="relative">
+                <Input
+                  type={showPassword.confirmPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  {...register("confirmPassword", {
+                    required: "Please confirm your password",
+                  })}
+                  className={`focus:border-primary/50 focus:ring-primary/10 selection:bg-primary/30 border-border bg-background/50 text-foreground placeholder:text-muted-foreground/50 h-10 rounded-xl pl-10 text-sm transition-all focus:ring-2 md:h-11 ${errors.confirmPassword ? "border-red-500/50 ring-red-500/10 focus:border-red-500/50 focus:ring-red-500/10" : ""}`}
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setShowPassword((prev) => ({
+                      ...prev,
+                      confirmPassword: !prev.confirmPassword,
+                    }))
+                  }
+                  className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3.5 -translate-y-1/2 focus:outline-none"
+                >
+                  {showPassword.confirmPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </button>
+              </div>
               {errors.confirmPassword && (
-                <p className="mt-1 ml-1 text-[10px] font-bold text-red-400/80">
+                <p className="mt-1 ml-1 text-[10px] font-bold text-red-500/80">
                   {errors.confirmPassword.message}
                 </p>
               )}
@@ -179,8 +227,8 @@ export const RegisterCard = () => {
           </div>
 
           {error && (
-            <div className="animate-in fade-in slide-in-from-top-2 rounded-2xl border border-red-500/20 bg-red-500/10 p-4 backdrop-blur-md">
-              <div className="text-sm font-bold text-red-400">
+            <div className="animate-in fade-in slide-in-from-top-2 rounded-xl border border-red-500/20 bg-red-500/10 p-3 backdrop-blur-md">
+              <div className="text-xs font-bold text-red-500">
                 {(error as any)?.data?.message ||
                   "Registration failed. Please check your inputs."}
               </div>
@@ -190,9 +238,9 @@ export const RegisterCard = () => {
                     (source: any, idx: number) => (
                       <li
                         key={idx}
-                        className="flex items-center gap-1.5 text-xs text-red-400/70"
+                        className="flex items-center gap-1.5 text-xs text-red-500/70"
                       >
-                        <span className="h-1 w-1 rounded-full bg-red-400/50" />
+                        <span className="h-1 w-1 rounded-full bg-red-500/50" />
                         {source.message}
                       </li>
                     ),
@@ -205,35 +253,35 @@ export const RegisterCard = () => {
           <Button
             type="submit"
             disabled={isLoading}
-            className="group bg-cyber-gradient shadow-cyber-purple/20 relative mt-4 h-11 w-full overflow-hidden rounded-2xl text-lg font-bold text-white shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 md:h-14"
+            className="group bg-cyber-gradient shadow-primary/20 relative mt-3 h-10 w-full overflow-hidden rounded-xl text-base font-bold text-white shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 md:h-12"
           >
             {isLoading ? (
-              <Loader2 className="h-6 w-6 animate-spin" />
+              <Loader2 className="h-5 w-5 animate-spin" />
             ) : (
               <span className="flex items-center justify-center gap-2">
                 Join Now{" "}
-                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </span>
             )}
           </Button>
 
-          <div className="relative my-6 md:my-8">
+          <div className="relative my-5 md:my-6">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-white/5" />
+              <div className="border-border/50 w-full border-t" />
             </div>
-            <div className="relative flex justify-center text-[10px] font-bold tracking-[0.3em] text-white/20 uppercase">
-              <span className="bg-[#0D0D18] px-4">Or</span>
+            <div className="text-muted-foreground relative flex justify-center text-[10px] font-bold tracking-[0.3em] uppercase">
+              <span className="bg-card px-3">Or</span>
             </div>
           </div>
 
           <GoogleLoginButton />
         </form>
 
-        <p className="mt-6 text-center text-[15px] font-medium text-white/30 md:mt-10">
+        <p className="text-muted-foreground mt-5 text-center text-xs font-medium md:mt-8">
           Already a member?{" "}
           <Link
             href="/login"
-            className="text-cyber-purple hover:text-cyber-blue font-bold underline decoration-2 underline-offset-4 transition-colors"
+            className="text-primary hover:text-primary/80 font-bold underline decoration-2 underline-offset-4 transition-colors"
           >
             Sign In
           </Link>

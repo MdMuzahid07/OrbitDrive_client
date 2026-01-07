@@ -10,6 +10,7 @@ const authApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      transformResponse: (res: any) => res.data,
     }),
     login: builder.mutation<AuthResponse, any>({
       query: (data) => ({
@@ -17,6 +18,7 @@ const authApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      transformResponse: (res: any) => res.data,
     }),
     logout: builder.mutation<any, void>({
       query: () => ({
@@ -28,6 +30,13 @@ const authApi = baseApi.injectEndpoints({
       query: (token) => ({
         url: `/auth/verify-email/${token}`,
         method: "GET",
+      }),
+    }),
+    resendVerificationEmail: builder.mutation<any, { email: string }>({
+      query: (data) => ({
+        url: "/auth/resend-verification-email",
+        method: "POST",
+        body: data,
       }),
     }),
     forgotPassword: builder.mutation<any, { email: string }>({
@@ -47,6 +56,7 @@ const authApi = baseApi.injectEndpoints({
     getMe: builder.query<{ user: any }, void>({
       query: () => "/auth/me",
       providesTags: ["User"],
+      transformResponse: (res: any) => res.data,
     }),
   }),
 });
@@ -56,6 +66,7 @@ export const {
   useLoginMutation,
   useLogoutMutation,
   useVerifyEmailMutation,
+  useResendVerificationEmailMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation,
   useGetMeQuery,
