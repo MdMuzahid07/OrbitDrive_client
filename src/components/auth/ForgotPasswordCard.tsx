@@ -33,7 +33,6 @@ export const ForgotPasswordCard = () => {
   return (
     <div className="mx-auto w-full max-w-md">
       <div className="bg-card/80 border-border shadow-primary/5 ring-border/50 relative rounded-[2rem] border p-6 shadow-xl ring-1 backdrop-blur-xl md:p-8">
-        {/* Glowing Header Icon */}
         <div className="mb-5 flex flex-col items-center md:mb-8">
           <div className="relative mb-3 md:mb-4">
             <div className="bg-cyber-gradient absolute inset-0 animate-pulse rounded-2xl opacity-40 blur-xl" />

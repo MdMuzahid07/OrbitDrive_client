@@ -1,17 +1,14 @@
 "use client";
-
 import { useGetMeQuery } from "@/redux/features/auth/auth.api";
 import { selectIsAuthenticated } from "@/redux/features/auth/auth.slice";
 import { useAppSelector } from "@/redux/hooks";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const router = useRouter();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const pathname = usePathname();
   const { isLoading: isFetchingUser } = useGetMeQuery(undefined, {
     skip: !isAuthenticated,
   });

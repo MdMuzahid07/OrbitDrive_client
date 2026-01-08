@@ -19,12 +19,12 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { useRegisterMutation } from "@/redux/features/auth/auth.api";
-import { useAppSelector } from "@/redux/hooks";
+import { setCredentials } from "@/redux/features/auth/auth.slice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { GoogleLoginButton } from "./GoogleLoginButton";
 
-// Validation Schema
 const registerSchema = z
   .object({
     name: z.string().min(2, "Name must be at least 2 characters"),
@@ -41,6 +41,7 @@ type RegisterFormInputs = z.infer<typeof registerSchema>;
 
 export const RegisterCard: FC = () => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
   const [registerAccount, { isLoading, error }] = useRegisterMutation();
   const [showPassword, setShowPassword] = useState({
@@ -48,32 +49,89 @@ export const RegisterCard: FC = () => {
     confirmPassword: false,
   });
 
+  const [isSuccess, setIsSuccess] = useState(false);
+
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<RegisterFormInputs>({
     resolver: zodResolver(registerSchema),
   });
 
   useEffect(() => {
-    if (isAuthenticated) router.push("/");
-  }, [isAuthenticated, router]);
+    if (isAuthenticated && !isSuccess) router.push("/");
+  }, [isAuthenticated, router, isSuccess]);
 
   const onSubmit = async (data: RegisterFormInputs) => {
     try {
-      await registerAccount(data).unwrap();
-      toast.success("Account created! Please check your email to verify.");
-      router.push("/login?registered=true");
+      const result = await registerAccount(data).unwrap();
+
+      dispatch(
+        setCredentials({
+          user: result.data.user,
+          accessToken: result.data.accessToken,
+        }),
+      );
+
+      toast.success("Account created successfully!");
+      setIsSuccess(true);
     } catch (err: any) {
       toast.error(err.data?.message || "Registration failed");
     }
   };
 
+  if (isSuccess) {
+    return (
+      <div className="mx-auto w-full max-w-[500px]">
+        <div className="bg-card/80 shadow-primary/5 ring-border/50 relative rounded-[2rem] border p-6 shadow-xl ring-1 backdrop-blur-xl md:p-8">
+          <div className="flex flex-col items-center text-center">
+            <div className="relative mb-6">
+              <div className="absolute inset-0 animate-pulse rounded-full bg-green-500/20 blur-xl" />
+              <div className="bg-background shadow-primary/20 relative flex h-20 w-20 items-center justify-center rounded-full shadow-lg ring-1 ring-green-500/20">
+                <Mail className="h-10 w-10 text-green-500" />
+              </div>
+            </div>
+
+            <h2 className="text-card-foreground mb-2 text-2xl font-bold tracking-tight">
+              Verify your email
+            </h2>
+
+            <p className="text-muted-foreground mb-6 text-sm leading-relaxed font-medium">
+              {`We've`} sent a verification link to <br />
+              <span className="text-foreground font-bold">
+                {getValues("email")}
+              </span>
+              <br />
+              Please check your inbox to activate your account.
+            </p>
+
+            <Button
+              onClick={() => router.push("/")}
+              className="bg-cyber-gradient shadow-primary/20 w-full rounded-xl font-bold text-white shadow-lg transition-transform hover:scale-[1.02] active:scale-[0.98] md:h-12"
+            >
+              Continue to Dashboard
+            </Button>
+
+            <p className="text-muted-foreground/80 mt-4 text-xs">
+              {`Didn't`} receive the email?{" "}
+              <button
+                className="text-primary hover:underline"
+                onClick={() => toast.info("Resend feature coming soon")}
+              >
+                Click to resend
+              </button>
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto w-full max-w-[500px]">
       <div className="bg-card/80 border-border shadow-primary/5 ring-border/50 relative rounded-[2rem] border p-6 shadow-xl ring-1 backdrop-blur-xl md:p-8">
-        {/* Glowing Header Icon */}
         <div className="mb-5 flex flex-col items-center md:mb-8">
           <div className="relative mb-3 md:mb-4">
             <div className="bg-cyber-gradient absolute inset-0 animate-pulse rounded-2xl opacity-40 blur-xl" />
@@ -89,9 +147,7 @@ export const RegisterCard: FC = () => {
           </p>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-3.5">
-          {/* Name */}
           <div className="space-y-1.5">
             <label className="text-muted-foreground ml-1 text-[10px] font-bold tracking-[0.2em] uppercase">
               Full Name
@@ -118,7 +174,6 @@ export const RegisterCard: FC = () => {
             )}
           </div>
 
-          {/* Email */}
           <div className="space-y-1.5">
             <label className="text-muted-foreground ml-1 text-[10px] font-bold tracking-[0.2em] uppercase">
               Email Address
@@ -145,7 +200,6 @@ export const RegisterCard: FC = () => {
             )}
           </div>
 
-          {/* Passwords */}
           <div className="grid grid-cols-1 gap-3.5 md:grid-cols-2">
             <div className="space-y-1.5">
               <label className="text-muted-foreground ml-1 text-[10px] font-bold tracking-[0.2em] uppercase">
