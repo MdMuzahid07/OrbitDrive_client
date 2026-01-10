@@ -57,7 +57,7 @@ const Breadcrumbs = ({ sidebarToggle }: { sidebarToggle: () => void }) => {
                   onClick={() => handleClick(crumb._id)}
                   className={`relative rounded-lg px-3 py-1.5 text-sm font-bold tracking-tight whitespace-nowrap transition-all ${
                     index === breadcrumbs.length - 1
-                      ? "bg-accent text-foreground shadow-[0_0_15px_-5px_var(--color-primary)]"
+                      ? "bg-accent text-foreground"
                       : "text-muted-foreground hover:bg-accent/40 hover:text-foreground"
                   }`}
                 >

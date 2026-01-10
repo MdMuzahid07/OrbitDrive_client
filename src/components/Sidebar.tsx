@@ -10,13 +10,14 @@ import {
   User as UserIcon,
 } from "lucide-react";
 import Image from "next/image";
-import { FC, ReactNode, useCallback, useMemo } from "react";
+import { FC, ReactNode, useCallback, useEffect, useMemo, useRef } from "react";
 import { useLogoutMutation } from "../redux/features/auth/auth.api";
 import { logout as clearAuth } from "../redux/features/auth/auth.slice";
 import { useGetAllNodesQuery } from "../redux/features/fileSystem/fileSystem.api";
 import {
   setContextMenu,
   setCurrentFolderId,
+  setExpandedFolders,
   setOpenFile,
   toggleFolderExpansion,
 } from "../redux/features/fileSystem/fileSystem.slice";
@@ -33,6 +34,23 @@ const Sidebar: FC = () => {
   const user = useAppSelector((state) => state.auth.user);
   const { data: nodes = [], isLoading } = useGetAllNodesQuery();
   const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
+
+  const initialized = useRef(false);
+
+  useEffect(() => {
+    if (
+      !isLoading &&
+      Array.isArray(nodes) &&
+      nodes.length > 0 &&
+      !initialized.current
+    ) {
+      const allFolderIds = nodes
+        .filter((node: FileNode) => node.type === "folder")
+        .map((node: FileNode) => node._id);
+      dispatch(setExpandedFolders(["root", ...allFolderIds]));
+      initialized.current = true;
+    }
+  }, [nodes, isLoading, dispatch]);
 
   const handleLogout = async () => {
     try {
