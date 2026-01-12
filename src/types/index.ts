@@ -1,7 +1,15 @@
 export interface FileNode {
   _id: string;
   name: string;
-  type: "folder" | "text" | "image";
+  type:
+    | "folder"
+    | "text"
+    | "image"
+    | "audio"
+    | "video"
+    | "document"
+    | "archive"
+    | "other";
   parentId: string | null;
   content?: string;
   url?: string;

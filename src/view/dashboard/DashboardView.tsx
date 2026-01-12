@@ -15,6 +15,7 @@ import { setContextMenu } from "@/redux/features/fileSystem/fileSystem.slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { Loader2 } from "lucide-react";
 import { FC, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 
 const DashboardView: FC = () => {
   const dispatch = useAppDispatch();
@@ -78,7 +79,9 @@ const DashboardView: FC = () => {
 
       closeModal();
     } catch (error: any) {
-      alert(error?.data?.message || "Failed to create item");
+      toast.error("Creation Failed", {
+        description: error?.data?.message || "Failed to create item",
+      });
     }
   };
 
@@ -89,7 +92,9 @@ const DashboardView: FC = () => {
       await updateNode({ id: renameId, name: itemName.trim() }).unwrap();
       closeModal();
     } catch (error: any) {
-      alert(error?.data?.message || "Failed to rename item");
+      toast.error("Rename Failed", {
+        description: error?.data?.message || "Failed to rename item",
+      });
     }
   };
 
@@ -111,7 +116,9 @@ const DashboardView: FC = () => {
       await deleteNode(modalState.itemId).unwrap();
       closeModal();
     } catch (error: any) {
-      alert(error?.data?.message || "Failed to delete item");
+      toast.error("Delete Failed", {
+        description: error?.data?.message || "Failed to delete item",
+      });
     }
   };
 
@@ -123,16 +130,91 @@ const DashboardView: FC = () => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
+    // Client-side validation
+    const MAX_SIZE = 15 * 1024 * 1024; // 15MB
+    const ALLOWED_EXTENSIONS = new Set([
+      // Images
+      "jpg",
+      "jpeg",
+      "png",
+      "webp",
+      "gif",
+      "svg",
+      "bmp",
+      "tiff",
+      // Text & Code
+      "txt",
+      "csv",
+      "html",
+      "css",
+      "js",
+      "json",
+      "xml",
+      // Documents
+      "pdf",
+      "doc",
+      "docx",
+      "xls",
+      "xlsx",
+      "ppt",
+      "pptx",
+      "rtf",
+      // Audio
+      "mp3",
+      "wav",
+      "ogg",
+      "m4a",
+      "aac",
+      "webm",
+      // Video
+      "mp4",
+      "webm",
+      "mov",
+      "avi",
+      "mkv",
+      // Archives
+      "zip",
+      "rar",
+      "7z",
+      "gz",
+      "tar",
+    ]);
+
+    const validFiles: File[] = [];
+    const invalidFiles: string[] = [];
+
+    Array.from(files).forEach((file) => {
+      const ext = file.name.split(".").pop()?.toLowerCase();
+      if (file.size > MAX_SIZE) {
+        invalidFiles.push(`${file.name} (Too large > 15MB)`);
+      } else if (!ext || !ALLOWED_EXTENSIONS.has(ext)) {
+        invalidFiles.push(`${file.name} (Invalid type)`);
+      } else {
+        validFiles.push(file);
+      }
+    });
+
+    if (invalidFiles.length > 0) {
+      toast.error("Files Rejected", {
+        description: invalidFiles.join("\n"),
+        duration: 5000,
+      });
+      if (fileInputRef.current) fileInputRef.current.value = ""; // Reset input
+      if (validFiles.length === 0) return;
+    }
+
     // Ensure parentId is "root" when at root level
     const parentId = currentFolderId || "root";
 
     try {
-      await uploadFiles({ files: Array.from(files), parentId }).unwrap();
+      await uploadFiles({ files: validFiles, parentId }).unwrap();
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
     } catch (error: any) {
-      alert(error?.data?.message || "Failed to upload files");
+      toast.error("Upload Failed", {
+        description: error?.data?.message || "Failed to upload files",
+      });
     }
   };
 
@@ -237,7 +319,7 @@ const DashboardView: FC = () => {
         ref={fileInputRef}
         type="file"
         multiple
-        accept="image/*,text/plain"
+        accept="*"
         onChange={handleFileChange}
         className="hidden"
       />

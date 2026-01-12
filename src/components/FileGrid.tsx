@@ -1,4 +1,10 @@
-import { FileImage, FileText, Folder } from "lucide-react";
+import {
+  FileImage,
+  FileText,
+  FileVideo,
+  FileVolume2,
+  Folder,
+} from "lucide-react";
 import { FC, useMemo } from "react";
 import { useGetAllNodesQuery } from "../redux/features/fileSystem/fileSystem.api";
 import {
@@ -101,7 +107,21 @@ const FileGrid: FC = () => {
           <div className="relative flex flex-col items-center gap-4">
             <div className="relative">
               <div
-                className={`absolute inset-0 opacity-0 blur-lg transition-opacity group-hover:opacity-40 ${item.type === "folder" ? "bg-cyber-blue" : item.type === "image" ? "bg-emerald-400" : "bg-cyber-purple"}`}
+                className={`absolute inset-0 opacity-0 blur-lg transition-opacity group-hover:opacity-40 ${
+                  item.type === "folder"
+                    ? "bg-cyber-blue"
+                    : item.type === "image"
+                      ? "bg-emerald-400"
+                      : item.type === "video"
+                        ? "bg-rose-400"
+                        : item.type === "audio"
+                          ? "bg-amber-400"
+                          : item.type === "document"
+                            ? "bg-red-400"
+                            : item.type === "archive"
+                              ? "bg-purple-400"
+                              : "bg-cyber-purple"
+                }`}
               />
               {item.type === "folder" ? (
                 <Folder
@@ -112,6 +132,26 @@ const FileGrid: FC = () => {
                 <FileImage
                   size={48}
                   className="text-emerald-500 transition-transform group-hover:scale-110"
+                />
+              ) : item.type === "video" ? (
+                <FileVideo
+                  size={48}
+                  className="text-rose-500 transition-transform group-hover:scale-110"
+                />
+              ) : item.type === "audio" ? (
+                <FileVolume2
+                  size={48}
+                  className="text-amber-500 transition-transform group-hover:scale-110"
+                />
+              ) : item.type === "document" ? (
+                <FileText
+                  size={48}
+                  className="text-red-500 transition-transform group-hover:scale-110"
+                />
+              ) : item.type === "archive" ? (
+                <FileText
+                  size={48}
+                  className="text-purple-500 transition-transform group-hover:scale-110"
                 />
               ) : (
                 <FileText

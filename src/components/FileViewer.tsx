@@ -1,5 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
-import { FileImage, FileText, Save, X } from "lucide-react";
+import {
+  FileImage,
+  FileText,
+  FileVideo,
+  FileVolume2,
+  Save,
+  X,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { useUpdateNodeMutation } from "../redux/features/fileSystem/fileSystem.api";
 import { setOpenFile } from "../redux/features/fileSystem/fileSystem.slice";
@@ -34,6 +41,19 @@ const FileViewer = () => {
     dispatch(setOpenFile(null));
   };
 
+  const getIcon = () => {
+    switch (openFile.type) {
+      case "image":
+        return <FileImage size={20} />;
+      case "video":
+        return <FileVideo size={20} />;
+      case "audio":
+        return <FileVolume2 size={20} />;
+      default:
+        return <FileText size={20} />;
+    }
+  };
+
   return (
     <div className="bg-background/80 animate-in fade-in fixed inset-0 z-120 flex items-center justify-center p-4 backdrop-blur-md duration-300">
       <div className="animate-in zoom-in-95 relative w-full max-w-5xl duration-300">
@@ -45,18 +65,14 @@ const FileViewer = () => {
           <div className="border-border bg-muted/50 flex items-center justify-between border-b px-8 py-6">
             <div className="flex items-center gap-4">
               <div className="bg-cyber-gradient shadow-primary/20 flex h-10 w-10 items-center justify-center rounded-xl text-white shadow-lg">
-                {openFile.type === "image" ? (
-                  <FileImage size={20} />
-                ) : (
-                  <FileText size={20} />
-                )}
+                {getIcon()}
               </div>
               <div>
                 <h2 className="font-orbitron text-foreground text-xl font-black tracking-tighter uppercase">
                   {openFile.name}
                 </h2>
                 <p className="text-muted-foreground text-[10px] font-bold tracking-widest uppercase">
-                  Sector Access Protocol
+                  {openFile.type} File
                 </p>
               </div>
             </div>
@@ -99,7 +115,7 @@ const FileViewer = () => {
                   </button>
                 </div>
               </div>
-            ) : (
+            ) : openFile.type === "image" ? (
               <div className="group border-border bg-muted/20 relative flex min-h-[50vh] items-center justify-center overflow-hidden rounded-2xl border p-4">
                 <div className="bg-cyber-pattern absolute inset-0 opacity-5" />
                 <img
@@ -109,7 +125,34 @@ const FileViewer = () => {
                 />
                 <div className="bg-cyber-radial-glow absolute inset-0 opacity-0 transition-opacity group-hover:opacity-40" />
               </div>
-            )}
+            ) : openFile.type === "audio" ? (
+              <div className="border-border bg-muted/20 relative flex min-h-[30vh] flex-col items-center justify-center gap-8 rounded-2xl border p-8">
+                <div className="bg-cyber-pattern absolute inset-0 opacity-5" />
+                <div className="relative z-10 flex flex-col items-center gap-6">
+                  <div className="bg-cyber-gradient flex h-24 w-24 items-center justify-center rounded-full shadow-2xl">
+                    <FileVolume2 size={48} className="text-white" />
+                  </div>
+                  <audio
+                    controls
+                    className="w-full max-w-md"
+                    src={openFile.url || ""}
+                  >
+                    Your browser does not support the audio element.
+                  </audio>
+                </div>
+              </div>
+            ) : openFile.type === "video" ? (
+              <div className="border-border bg-muted/20 relative flex min-h-[50vh] items-center justify-center overflow-hidden rounded-2xl border p-4">
+                <div className="bg-cyber-pattern absolute inset-0 opacity-5" />
+                <video
+                  controls
+                  className="relative z-10 max-h-[70vh] max-w-full rounded-xl shadow-2xl"
+                  src={openFile.url || ""}
+                >
+                  Your browser does not support the video element.
+                </video>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

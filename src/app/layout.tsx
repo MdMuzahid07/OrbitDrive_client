@@ -3,6 +3,7 @@ import { Orbitron } from "next/font/google";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 import { ThemeProvider } from "@/provider/theme-provider";
+import { Toaster } from "sonner";
 import ReduxProvider from "../provider/ReduxProvider";
 import "./globals.css";
 
@@ -61,6 +62,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <Toaster position="top-right" richColors closeButton />
           <ReduxProvider>{children}</ReduxProvider>
         </ThemeProvider>
       </body>
