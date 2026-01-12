@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Orbitron } from "next/font/google";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/provider/theme-provider";
 import ReduxProvider from "../provider/ReduxProvider";
 import "./globals.css";
 
