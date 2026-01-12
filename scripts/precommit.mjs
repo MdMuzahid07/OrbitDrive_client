@@ -4,7 +4,7 @@ import { execSync } from "child_process";
 const steps = [
   { label: "Step 1: Linting", command: "npx lint-staged" },
   { label: "Step 2: Type Checking", command: "npm run type-check" },
-  // { label: "Step 3: Build", command: "npm run build" }
+  { label: "Step 3: Build", command: "npm run build" },
 ];
 
 console.log(chalk.cyan("\n🚀 Starting pre-commit checks"));
