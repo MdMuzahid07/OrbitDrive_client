@@ -1,38 +1,89 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# OrbitDrive Client
 
-## Getting Started
+The modern, responsive frontend for OrbitDrive, built with Next.js 15, React 19, and TailwindCSS. It features a desktop-class file explorer interface entirely in the browser.
 
-First, run the development server:
+## 🚀 Getting Started
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Prerequisites
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Node.js (v18+)
+- Running OrbitDrive Server
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Installation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Navigate to the client directory:
 
-## Learn More
+   ```bash
+   cd client
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+2. Install dependencies:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. Create a `.env` file in the root directory:
 
-## Deploy on Vercel
+   ```env
+   NEXT_PUBLIC_BACKEND_URL=http://localhost:5000
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. Start the development server:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
 
-# OrbitDrive_client
+---
+
+## 🏗️ Architecture
+
+The frontend is built using a modern, scalable stack designed for performance and developer experience.
+
+### Core Stack
+
+- **Framework**: [Next.js 15](https://nextjs.org/) (App Router) for routing and server-side capabilities.
+- **Language**: TypeScript for type safety.
+- **Styling**: [TailwindCSS v4](https://tailwindcss.com/) for utility-first styling.
+- **Icons**: [Lucide React](https://lucide.dev/) for consistent iconography.
+
+### State Management (Redux Toolkit)
+
+I used a centralized state management architecture to handle complex application states.
+
+- **Store**: Configured in `redux/store.ts`.
+- **Persistence**: `redux-persist` is used to save the `auth` and `fileSystem` state to local storage, ensuring users stay logged in and preferences are saved across reloads.
+- **API Layer (RTK Query)**:
+  - Located in `redux/api/baseApi.ts`.
+  - Handles all data fetching, caching, and invalidation automatically.
+  - **Automatic Auth Injection**: A custom `prepareHeaders` function automatically attaches the JWT Access Token from the Redux state to every outgoing request, ensuring seamless authentication.
+
+---
+
+## 🔐 Authentication Flow
+
+The client implements a secure authentication flow that synchronizes with the backend:
+
+1. **Login/Register**: User credentials are exchanged for an `accessToken` and `user` object.
+2. **State Update**: These are stored in the Redux `auth` slice.
+3. **Persistence**: The state is persisted to `localStorage` via Redux Persist.
+4. **Request Authorization**:
+   - Every API request goes through the interceptor in `baseApi.ts`.
+   - It checks the Redux store for a valid token.
+   - It injects the `Authorization: Bearer <token>` header.
+   - This guarantees that even if Cookies fail (e.g., cross-site issues), the request remains authenticated.
+
+---
+
+## 🎨 Design System
+
+The UI is designed to feel like a native desktop application ("Cyber Glow" aesthetic).
+
+- **Components**: I use **Radix UI** primitives for accessible, unstyled interactive components (Dialogs, Slots).
+- **Forms**: Managed by **React Hook Form** + **Zod** for robust validation.
+- **Feedback**: **Sonner** is used for beautiful, non-intrusive toast notifications.

@@ -1,10 +1,10 @@
+import { ThemeProvider } from "@/provider/theme-provider";
 import type { Metadata } from "next";
 import { Orbitron } from "next/font/google";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-ignore
-import { ThemeProvider } from "@/provider/theme-provider";
 import { Toaster } from "sonner";
 import ReduxProvider from "../provider/ReduxProvider";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-ignore
 import "./globals.css";
 
 const orbitron = Orbitron({
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   description:
     "Store and manage your files securely with OrbitDrive. Access your data from anywhere.",
   keywords: ["cloud storage", "file storage", "secure storage", "OrbitDrive"],
-  authors: [{ name: "OrbitDrive Team" }],
+  authors: [{ name: "mdmuzahid.dev@gmail.com" }],
 
   openGraph: {
     title: "OrbitDrive - Secure Cloud Storage",

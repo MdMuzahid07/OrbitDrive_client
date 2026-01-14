@@ -259,7 +259,7 @@ const DashboardView: FC = () => {
 
       {/* Sidebar - responsive animated */}
       <aside
-        className={`fixed inset-y-0 left-0 z-70 h-full shadow-2xl transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] lg:relative lg:z-auto lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-70 h-full shadow-2xl transition-all duration-500 ease-in-out lg:relative lg:z-auto lg:translate-x-0 ${
           sidebarOpen
             ? "w-72 translate-x-0"
             : "w-72 -translate-x-full lg:pointer-events-none lg:w-0 lg:opacity-0"

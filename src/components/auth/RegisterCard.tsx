@@ -84,8 +84,8 @@ export const RegisterCard: FC = () => {
 
   if (isSuccess) {
     return (
-      <div className="mx-auto w-full max-w-[500px]">
-        <div className="bg-card/80 shadow-primary/5 ring-border/50 relative rounded-[2rem] border p-6 shadow-xl ring-1 backdrop-blur-xl md:p-8">
+      <div className="mx-auto w-full max-w-125">
+        <div className="bg-card/80 shadow-primary/5 ring-border/50 relative rounded-4xl border p-6 shadow-xl ring-1 backdrop-blur-xl md:p-8">
           <div className="flex flex-col items-center text-center">
             <div className="relative mb-6">
               <div className="absolute inset-0 animate-pulse rounded-full bg-green-500/20 blur-xl" />
@@ -130,8 +130,8 @@ export const RegisterCard: FC = () => {
   }
 
   return (
-    <div className="mx-auto w-full max-w-[500px]">
-      <div className="bg-card/80 border-border shadow-primary/5 ring-border/50 relative rounded-[2rem] border p-6 shadow-xl ring-1 backdrop-blur-xl md:p-8">
+    <div className="mx-auto w-full max-w-125">
+      <div className="bg-card/80 border-border shadow-primary/5 ring-border/50 relative rounded-4xl border p-6 shadow-xl ring-1 backdrop-blur-xl md:p-8">
         <div className="mb-5 flex flex-col items-center md:mb-8">
           <div className="relative mb-3 md:mb-4">
             <div className="bg-cyber-gradient absolute inset-0 animate-pulse rounded-2xl opacity-40 blur-xl" />

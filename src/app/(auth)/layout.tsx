@@ -11,7 +11,7 @@ export default function AuthLayout({
       {/* Subtle radial glow to pull focus to the center */}
       <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.05),transparent_70%)]" />
 
-      <div className="relative z-10 flex w-full max-w-[480px] flex-col items-center overflow-auto px-6 py-12">
+      <div className="relative z-10 flex w-full max-w-120 flex-col items-center overflow-auto px-6 py-12">
         <main className="animate-in fade-in zoom-in-95 w-full duration-1000">
           {children}
         </main>

@@ -60,7 +60,7 @@ export const ResetPasswordCard = () => {
   if (!token) {
     return (
       <div className="mx-auto w-full max-w-md">
-        <div className="bg-card/80 border-border shadow-primary/5 ring-border/50 relative rounded-[2rem] border p-6 shadow-xl ring-1 backdrop-blur-xl md:p-8">
+        <div className="bg-card/80 border-border shadow-primary/5 ring-border/50 relative rounded-4xl border p-6 shadow-xl ring-1 backdrop-blur-xl md:p-8">
           <div className="mb-5 flex flex-col items-center">
             <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-sm font-bold text-red-500">
               Invalid or missing reset token.
@@ -79,7 +79,7 @@ export const ResetPasswordCard = () => {
 
   return (
     <div className="mx-auto w-full max-w-md">
-      <div className="bg-card/80 border-border shadow-primary/5 ring-border/50 relative rounded-[2rem] border p-6 shadow-xl ring-1 backdrop-blur-xl md:p-8">
+      <div className="bg-card/80 border-border shadow-primary/5 ring-border/50 relative rounded-4xl border p-6 shadow-xl ring-1 backdrop-blur-xl md:p-8">
         <div className="mb-5 flex flex-col items-center md:mb-8">
           <div className="relative mb-3 md:mb-4">
             <div className="bg-cyber-gradient absolute inset-0 animate-pulse rounded-2xl opacity-40 blur-xl" />

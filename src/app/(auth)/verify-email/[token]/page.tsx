@@ -47,7 +47,7 @@ const VerifyEmailPage = () => {
 
       <div className="relative w-full max-w-md">
         {/* Card Glow */}
-        <div className="absolute inset-0 -z-10 rounded-3xl bg-gradient-to-r from-purple-500/30 to-blue-500/30 opacity-50 blur-2xl" />
+        <div className="absolute inset-0 -z-10 rounded-3xl bg-linear-to-r from-purple-500/30 to-blue-500/30 opacity-50 blur-2xl" />
 
         <div className="overflow-hidden rounded-3xl border border-white/20 bg-white/50 p-8 shadow-2xl backdrop-blur-xl dark:border-white/10 dark:bg-white/5">
           <div className="flex flex-col items-center justify-center text-center">
@@ -76,7 +76,7 @@ const VerifyEmailPage = () => {
                   OrbitDrive...
                 </p>
                 <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
-                  <div className="h-full animate-[progress_2s_ease-in-out_infinite] bg-gradient-to-r from-purple-500 to-blue-500" />
+                  <div className="h-full animate-[progress_2s_ease-in-out_infinite] bg-linear-to-r from-purple-500 to-blue-500" />
                 </div>
               </>
             ) : isError ? (

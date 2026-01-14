@@ -9,6 +9,14 @@ const baseApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: url,
     credentials: "include",
+    prepareHeaders: (headers, { getState }) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const token = (getState() as any).auth.token;
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
+      }
+      return headers;
+    },
   }),
   tagTypes: ["Nodes", "User"],
   endpoints: () => ({}),
