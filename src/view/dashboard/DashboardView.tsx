@@ -131,7 +131,7 @@ const DashboardView: FC = () => {
     if (!files || files.length === 0) return;
 
     // Client-side validation
-    const MAX_SIZE = 15 * 1024 * 1024; // 15MB
+    const MAX_SIZE = 20 * 1024 * 1024; // 20MB
     const ALLOWED_EXTENSIONS = new Set([
       // Images
       "jpg",
@@ -186,7 +186,7 @@ const DashboardView: FC = () => {
     Array.from(files).forEach((file) => {
       const ext = file.name.split(".").pop()?.toLowerCase();
       if (file.size > MAX_SIZE) {
-        invalidFiles.push(`${file.name} (Too large > 15MB)`);
+        invalidFiles.push(`${file.name} (Too large > 20MB)`);
       } else if (!ext || !ALLOWED_EXTENSIONS.has(ext)) {
         invalidFiles.push(`${file.name} (Invalid type)`);
       } else {
