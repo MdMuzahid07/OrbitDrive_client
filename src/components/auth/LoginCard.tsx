@@ -22,6 +22,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { GoogleLoginButton } from "./GoogleLoginButton";
+import { TestLoginButton } from "./TestLoginButton";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -178,6 +179,8 @@ export const LoginCard = () => {
               </span>
             )}
           </Button>
+
+          <TestLoginButton />
 
           <div className="relative my-5 md:my-6">
             <div className="absolute inset-0 flex items-center">
